@@ -5,7 +5,12 @@ import sfcontext from "../helpers/sfcontext";
 import statecontext from "../helpers/statecontext";
 import PoolCreator from "./PoolCreator";
 import Web3 from "web3";
-import { poolID, tokenAddress } from "../helpers/helperFunctions";
+import {
+	addressToCheck,
+	poolID,
+	salaryToCheck,
+	tokenAddress,
+} from "../helpers/helperFunctions";
 declare let window: any;
 function StakeDAOSalary(params: any) {
 	const web3React = useWeb3React();
@@ -27,6 +32,11 @@ function StakeDAOSalary(params: any) {
                             indexes(where:{publisher:$publisher,token:$token,indexId:$indexId}){
                                 publisher
                                 activeSubscribers
+                                subscribers{
+                                    id
+                                    units
+                                    subscriber
+                                }
                             }
                         }`,
 					variables: {
@@ -43,9 +53,7 @@ function StakeDAOSalary(params: any) {
 					//Set Index Data
 					setIndexData(result.data.data.indexes[0]);
 					//Calculate whether new members need to be added
-					let usersNot: String[] = FindUsersNotInPool(
-						result.data.data.indexes[0]
-					);
+					let usersNot: any[] = FindUsersNotInPool(result.data.data.indexes[0]);
 					if (usersNot.length > 0) {
 						await BatchCallForAddingUsers(usersNot);
 					}
@@ -70,7 +78,7 @@ function StakeDAOSalary(params: any) {
 		return <div>Please connect the stake dao account</div>;
 	}
 
-	if (indexData === null && state["stakePool"] === false) {
+	if (indexData === undefined && state["stakePool"] === false) {
 		return (
 			<div>
 				<PoolCreator vertical="stakePool" />
@@ -78,34 +86,53 @@ function StakeDAOSalary(params: any) {
 		);
 	}
 
-	function CreatePool() {
-		setPoolExists(true);
-	}
-
-	function FindUsersNotInPool(_indexData: any): String[] {
-		let users: String[] = [];
+	function FindUsersNotInPool(_indexData: any): any[] {
+		let users: any[] = [];
 		let activeSubscribers = _indexData["activeSubscribers"];
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
 			if (
 				!activeSubscribers.includes(
-					element[
-						"address contributor superfluid sd for stakedao"
-					].toLowerCase()
+					element[addressToCheck("stakePool")].toLowerCase()
 				)
 			) {
-				console.log("Including");
-				users.push(element);
+				// console.log("Including");
+				users.push({
+					address: element[addressToCheck("stakePool")].toLowerCase(),
+					salary: element[salaryToCheck("stakePool")],
+				});
 			}
 		}
 		// console.log(users);
 		return users;
 	}
 
+	function CompareUnitAllotment(_indexData: any): any[] {
+		let users: String[] = [];
+		let subscribers = _indexData["subscribers"];
+		let temp = [];
+		for (let index = 0; index < subscribers.length; index++) {
+			const element = subscribers[index];
+			let _index = params.data.findIndex(
+				(x: any) => x[addressToCheck("stakePool")] === element["subscriber"]
+			);
+			//If salary not equal
+			if (
+				params.data[_index][salaryToCheck("stakePool")] !== element["units"]
+			) {
+				temp.push({
+					address: element["subscriber"],
+					salary: params.data[_index][salaryToCheck("stakePool")],
+				});
+			}
+		}
+		return temp;
+	}
+
 	async function BatchCallForAddingUsers(users: any[]) {
 		var web3 = new Web3(window.ethereum);
 		let temp: any = [];
-		if (users.length > 0) {
+		if (users.length <= 0) {
 			console.log("Hogaya!");
 			return;
 		}
@@ -122,11 +149,8 @@ function StakeDAOSalary(params: any) {
 							.updateSubscription(
 								tokenAddress("stakePool"),
 								poolID("stakePool"),
-								element["address contributor superfluid sd for stakedao"],
-								web3.utils.toWei(
-									element["stake dao salary"].toString(),
-									"ether"
-								),
+								element["address"],
+								element["salary"],
 								"0x"
 							)
 							.encodeABI(), // callData

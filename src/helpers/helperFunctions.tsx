@@ -31,3 +31,37 @@ export function tokenAddress(vertical: String): any {
 			break;
 	}
 }
+
+export function salaryToCheck(vertical: String): any {
+	switch (vertical) {
+		case "stakePool":
+			return "stake dao salary";
+			break;
+		case "blackPool":
+			return "blackpool salary";
+			break;
+		case "rektPool":
+			return "rekt salary";
+			break;
+		default:
+			return "";
+			break;
+	}
+}
+
+export function addressToCheck(vertical: String): any {
+	switch (vertical) {
+		case "stakePool":
+			return "address contributor superfluid sd for stakedao";
+			break;
+		case "blackPool":
+			return "blackpool salary";
+			break;
+		case "rektPool":
+			return "rekt salary";
+			break;
+		default:
+			return "";
+			break;
+	}
+}
