@@ -86,8 +86,9 @@ function StakeDAOSalary(params: any) {
 			});
 		}
 		if (
-			web3React.active &&
-			web3React.account === process.env.REACT_APP_STAKEDAO_ACCOUNT
+			web3React.active
+			// &&
+			// web3React.account === process.env.REACT_APP_STAKEDAO_ACCOUNT
 		) {
 			GetData();
 		} else {
