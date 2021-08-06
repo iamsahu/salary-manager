@@ -70,7 +70,7 @@ function DataDisplay(params: any) {
 			{data === null ? (
 				<CSVReader
 					cssClass="csv-reader-input"
-					label="Select CSV with secret Death Star statistics"
+					label="Select CSV"
 					onFileLoaded={handleForce}
 					onError={handleDarkSideForce}
 					parserOptions={papaparseOptions}
@@ -86,10 +86,10 @@ function DataDisplay(params: any) {
 							<StakeDAOSalary data={data} />
 						</TabPane>
 						<TabPane tab="BlackPool" key="2">
-							Content of Tab Pane 2
+							Coming soon!
 						</TabPane>
 						<TabPane tab="rekt" key="3">
-							Content of Tab Pane 3
+							Coming soon!
 						</TabPane>
 					</Tabs>
 				</>

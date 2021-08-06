@@ -98,9 +98,9 @@ function StakeDAOSalary(params: any) {
 		return <div>Connect Wallet</div>;
 	}
 
-	if (web3React.account !== process.env.REACT_APP_STAKEDAO_ACCOUNT) {
-		return <div>Please connect the stake dao account</div>;
-	}
+	// if (web3React.account !== process.env.REACT_APP_STAKEDAO_ACCOUNT) {
+	// 	return <div>Please connect the stake dao account</div>;
+	// }
 
 	// if (indexData === undefined && state["stakePool"] === false) {
 	// 	return (
