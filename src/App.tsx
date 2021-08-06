@@ -17,7 +17,7 @@ import SuperfluidSDK from "@superfluid-finance/js-sdk";
 import DataDisplay from "./components/DataDisplay";
 import Framework from "@superfluid-finance/js-sdk/src/Framework";
 
-// const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 declare let window: any;
 function App() {
 	const web3React = useWeb3React();
@@ -27,7 +27,7 @@ function App() {
 		blackPool: false,
 		rektPool: false,
 	});
-	console.log(SF);
+	// console.log(SF);
 	useEffect(() => {
 		async function initSf() {
 			console.log("init sf");
@@ -80,11 +80,17 @@ function App() {
 		<div className="App">
 			<SFProvider value={SF}>
 				<StateProvider value={[state, setState]}>
-					{!web3React.active ? (
-						<Button onClick={ConnectWallet}>Connect Wallet</Button>
-					) : (
-						<DataDisplay />
-					)}
+					<Layout>
+						<Header>
+							{!web3React.active ? (
+								<Button onClick={ConnectWallet}>Connect Wallet</Button>
+							) : (
+								<></>
+							)}
+						</Header>
+						<Content>{!web3React.active ? <></> : <DataDisplay />}</Content>
+						<Footer></Footer>
+					</Layout>
 				</StateProvider>
 			</SFProvider>
 		</div>

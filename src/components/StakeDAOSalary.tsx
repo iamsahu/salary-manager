@@ -11,8 +11,9 @@ import {
 	salaryToCheck,
 	tokenAddress,
 } from "../helpers/helperFunctions";
-import { Button, Space } from "antd";
+import { Button, Space, notification } from "antd";
 declare let window: any;
+
 function StakeDAOSalary(params: any) {
 	const web3React = useWeb3React();
 
@@ -22,7 +23,20 @@ function StakeDAOSalary(params: any) {
 	const [state, setState] = useContext(statecontext);
 	const [progress, setProgress] = useState("loading");
 	const [loadingState, setLoadingState] = useState(false);
+	const [newUsers, setNewUsers] = useState(0);
+	const [modifyUser, setModifyUser] = useState(0);
 	var web3 = new Web3(window.ethereum);
+
+	const openNotification = (msg: string) => {
+		notification.open({
+			message: "Wohoo!",
+			description: msg,
+			onClick: () => {
+				console.log("Notification Clicked!");
+			},
+		});
+	};
+
 	useEffect(() => {
 		async function GetData() {
 			//Write code here to get the data
@@ -49,15 +63,18 @@ function StakeDAOSalary(params: any) {
 					},
 				},
 			}).then(async (result) => {
-				console.log(result.data.data["indexes"][0]);
+				// console.log(result.data.data["indexes"][0]);
 				//Based on count determine whether pool needs to be created or not
 				//If pool exists
 				if (result.data.data["indexes"].length > 0) {
 					//Set Index Data
 					setIndexData(result.data.data.indexes[0]);
 					//Calculate whether new members need to be added
-					let usersNot: any[] = FindUsersNotInPool(result.data.data.indexes[0]);
-					console.log(usersNot.length);
+					let usersNot: any[] = FindUsersNotInPool(
+						result.data.data.indexes[0],
+						true
+					);
+					console.log(usersNot);
 					if (usersNot.length > 0) {
 						setProgress("modifyPoolMembers");
 					} else {
@@ -96,16 +113,26 @@ function StakeDAOSalary(params: any) {
 	async function CreateIndex() {
 		if (sf === null) return;
 
-		if (indexData === undefined) {
-			return;
+		// if (indexData === undefined) {
+		// 	return;
+		// }
+
+		setLoadingState(true);
+		let usersNot: any[] = [];
+		for (let index = 0; index < params.data.length; index++) {
+			const element = params.data[index];
+			usersNot.push({
+				address: element[addressToCheck("stakePool")].toLowerCase(),
+				salary: element[salaryToCheck("stakePool")],
+			});
 		}
-		let usersNot: any[] = FindUsersNotInPool(indexData);
+
 		if (usersNot.length > 0) {
 			let temp: any[] = BatchCallForAddingUsers(usersNot);
 
 			temp.unshift([
 				201, // create constant flow (10/mo)
-				sf.agreements.cfa.address,
+				sf.agreements.ida.address,
 				web3.eth.abi.encodeParameters(
 					["bytes", "bytes"],
 					[
@@ -116,6 +143,7 @@ function StakeDAOSalary(params: any) {
 					]
 				),
 			]);
+			console.log(temp);
 			await sf.host
 				.batchCall(temp, { from: web3React.account })
 				.then((response: any) => {
@@ -124,35 +152,20 @@ function StakeDAOSalary(params: any) {
 					// setConfirmLoading(false);
 					setLoadingState(false);
 					setProgress("disburseReady");
+					openNotification("Index created successfully!");
 				})
 				.catch((error: any) => {
 					console.log(error);
 					setLoadingState(false);
 				});
 		}
-		// await sf.ida
-		// 	.createIndex({
-		// 		superToken: tokenAddress("stakePool"),
-		// 		indexId: poolID("stakePool"),
-		// 		publisher: web3React.account,
-		// 	})
-		// 	.then((response: any) => {
-		// 		console.log(response);
-		// 		// setVisible(false);
-		// 		// setConfirmLoading(false);
-		// 		setLoadingState(false);
-		// 		setProgress("disburseReady");
-		// 	})
-		// 	.catch((error: any) => {
-		// 		console.log(error);
-		// 		setLoadingState(false);
-		// 	});
 	}
 
 	async function AddUsersToPool() {
 		if (indexData === undefined) {
 			return;
 		}
+		setLoadingState(true);
 		let usersNot: any[] = FindUsersNotInPool(indexData);
 		if (usersNot.length > 0) {
 			let temp: any[] = BatchCallForAddingUsers(usersNot);
@@ -163,14 +176,36 @@ function StakeDAOSalary(params: any) {
 					console.log(response);
 					setLoadingState(false);
 					setProgress("disburseReady");
+					openNotification("Users added successfully!!");
 				})
-				.catch((error: any) => console.log(error));
+				.catch((error: any) => {
+					console.log(error);
+					setLoadingState(false);
+				});
 		}
 	}
 
-	function FindUsersNotInPool(_indexData: any): any[] {
+	function FindUsersNotInPool(_indexData: any, firstLoad = false): any[] {
 		let users: any[] = [];
+		let notIn: number = 0;
+		let mod: number = 0;
+		// if (firstLoad) {
+		// 	return users;
+		// }
+		// if (_indexData) {
+		// 	for (let index = 0; index < params.data.length; index++) {
+		// 		const element = params.data[index];
+		// 		users.push({
+		// 			address: element[addressToCheck("stakePool")].toLowerCase(),
+		// 			salary: element[salaryToCheck("stakePool")],
+		// 		});
+		// 		notIn += 1;
+		// 	}
+		// 	return users;
+		// }
+
 		let activeSubscribers = _indexData["activeSubscribers"];
+
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
 			if (
@@ -183,6 +218,7 @@ function StakeDAOSalary(params: any) {
 					address: element[addressToCheck("stakePool")].toLowerCase(),
 					salary: element[salaryToCheck("stakePool")],
 				});
+				notIn += 1;
 			} else {
 				//Check if the salary is different from what is present in the IDA
 				// console.log(element[addressToCheck("stakePool")].toLowerCase());
@@ -207,12 +243,15 @@ function StakeDAOSalary(params: any) {
 					_indexData["subscribers"][_index]["units"]
 				) {
 					users.push({
-						address: element["subscriber"],
+						address: element[addressToCheck("stakePool")],
 						salary: params.data[_indexCSV][salaryToCheck("stakePool")],
 					});
+					mod += 1;
 				}
 			}
 		}
+		setModifyUser(mod);
+		setNewUsers(notIn);
 		//TODO: Code for finding if any users were removed from the pool
 		// console.log(users);
 		return users;
@@ -228,7 +267,7 @@ function StakeDAOSalary(params: any) {
 			const element = users[index];
 			// console.log(poolID("stakePool"));
 			temp.push([
-				201, // create constant flow (10/mo)
+				201,
 				sf.agreements.ida.address,
 				web3.eth.abi.encodeParameters(
 					["bytes", "bytes"],
@@ -254,14 +293,26 @@ function StakeDAOSalary(params: any) {
 		// 	.catch((error: any) => console.log(error));
 	}
 
-	async function ReleaseThePayment() {
+	function AmountToBePaid(): any {
 		let payment: number = 0;
+
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
 			payment += Number(element[salaryToCheck("stakePool")]);
 		}
-		console.log(payment);
-		console.log(web3.utils.toWei(payment.toString(), "ether"));
+
+		return <div>Amount to be paid {payment}</div>;
+	}
+
+	async function ReleaseThePayment() {
+		let payment: number = 0;
+		setLoadingState(true);
+		for (let index = 0; index < params.data.length; index++) {
+			const element = params.data[index];
+			payment += Number(element[salaryToCheck("stakePool")]);
+		}
+		// console.log(payment);
+		// console.log(web3.utils.toWei(payment.toString(), "ether"));
 		const bob = sf.user({
 			address: web3React.account,
 			token: tokenAddress("stakePool"),
@@ -274,9 +325,12 @@ function StakeDAOSalary(params: any) {
 			.then((response: any) => {
 				// console.log(response);
 				setProgress("completed");
+				setLoadingState(false);
+				openNotification("Amount disbursed!");
 			})
 			.catch((error: any) => {
 				console.log(error);
+				setLoadingState(false);
 			});
 		// await sf.ida
 		// 	.distribute({
@@ -298,7 +352,7 @@ function StakeDAOSalary(params: any) {
 		<div>
 			<Space direction="vertical">
 				{progress === "createPool" ? (
-					<Button onClick={CreateIndex} type="primary">
+					<Button onClick={CreateIndex} type="primary" loading={loadingState}>
 						Create Pool
 					</Button>
 				) : (
@@ -307,18 +361,36 @@ function StakeDAOSalary(params: any) {
 					</Button>
 				)}
 				{progress === "modifyPoolMembers" ? (
-					<Button onClick={AddUsersToPool} type="primary">
-						Modify Pool Members
-					</Button>
+					<>
+						<div>New Users: {newUsers}</div>
+						<br />
+						<div>Modify Users: {modifyUser}</div>
+						<br />
+						<Button
+							onClick={AddUsersToPool}
+							type="primary"
+							loading={loadingState}
+						>
+							Modify Pool Members
+						</Button>
+					</>
 				) : (
 					<Button onClick={AddUsersToPool} disabled>
 						Modify Pool Members
 					</Button>
 				)}
 				{progress === "disburseReady" ? (
-					<Button onClick={ReleaseThePayment} type="primary">
-						Disburse Amount
-					</Button>
+					<>
+						{AmountToBePaid()}
+						<br />
+						<Button
+							onClick={ReleaseThePayment}
+							type="primary"
+							loading={loadingState}
+						>
+							Disburse Amount
+						</Button>
+					</>
 				) : (
 					<Button onClick={ReleaseThePayment} disabled>
 						Disburse Amount
@@ -334,3 +406,13 @@ export default StakeDAOSalary;
 //Fetch data from the IDA
 //If there are people missing from the pool show a prompt to add them
 //If all the members are added to the pool provide the option of releasing the payment
+
+// {
+//   indexes(where:{indexId:3,token:"0x0F1D7C55A2B133E000eA10EeC03c774e0d6796e8",publisher:"0xDa1495EBD7573D8E7f860862BaA3aBecebfa02E0"}){
+//     subscribers{
+//       subscriber
+//       totalPendingApproval
+//       units
+//     }
+//   }
+// }

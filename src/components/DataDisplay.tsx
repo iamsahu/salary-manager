@@ -1,9 +1,11 @@
 // import { useFilePicker } from "use-file-picker";
 import React, { useEffect, useState } from "react";
-// import { Button } from "antd";
+import { Tabs } from "antd";
 import CSVReader from "react-csv-reader";
 // import axios from "axios";
 import StakeDAOSalary from "./StakeDAOSalary";
+
+const { TabPane } = Tabs;
 
 function DataDisplay(params: any) {
 	const [data, setdata] = useState<Array<any> | null>(null);
@@ -43,7 +45,7 @@ function DataDisplay(params: any) {
 	// }
 
 	function handleForce(params: any) {
-		console.log(params);
+		// console.log(params);
 		setdata(params);
 	}
 	function handleDarkSideForce(params: any) {
@@ -55,7 +57,9 @@ function DataDisplay(params: any) {
 		// skipEmptyLines: true,
 		transformHeader: (header: string) => header.toLowerCase(),
 	};
-
+	function callback(key: string) {
+		console.log(key);
+	}
 	return (
 		<div>
 			{/* <Button onClick={() => openFileSelector()}>Open the Payout File</Button> */}
@@ -77,7 +81,17 @@ function DataDisplay(params: any) {
 			) : (
 				<>
 					<div>Total {data.length} records detected</div> <br />
-					<StakeDAOSalary data={data} />
+					<Tabs defaultActiveKey="1" onChange={callback}>
+						<TabPane tab="StakeDAO" key="1">
+							<StakeDAOSalary data={data} />
+						</TabPane>
+						<TabPane tab="BlackPool" key="2">
+							Content of Tab Pane 2
+						</TabPane>
+						<TabPane tab="rekt" key="3">
+							Content of Tab Pane 3
+						</TabPane>
+					</Tabs>
 				</>
 			)}
 		</div>
