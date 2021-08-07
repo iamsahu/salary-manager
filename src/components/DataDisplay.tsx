@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Tabs } from "antd";
 import CSVReader from "react-csv-reader";
 // import axios from "axios";
-import StakeDAOSalary from "./StakeDAOSalary";
+import VerticalSalary from "./VerticalSalary";
 
 const { TabPane } = Tabs;
 
@@ -84,7 +84,7 @@ function DataDisplay(params: any) {
 					<div>Total {data.length} records detected</div> <br />
 					<Tabs defaultActiveKey="1" onChange={callback}>
 						<TabPane tab="StakeDAO" key="1">
-							<StakeDAOSalary data={data} />
+							<VerticalSalary data={data} vertical={"stakePool"} />
 						</TabPane>
 						<TabPane tab="BlackPool" key="2">
 							Coming soon!

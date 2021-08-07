@@ -14,6 +14,22 @@ export function poolID(vertical: String): any {
 	}
 }
 
+export function accountAddress(vertical: String): any {
+	switch (vertical) {
+		case "stakePool":
+			return process.env.REACT_APP_STAKEDAO_ACCOUNT;
+
+		case "blackPool":
+			return process.env.REACT_APP_BLACKPOOL_ACCOUNT;
+
+		case "rektPool":
+			return process.env.REACT_APP_REKT_ACCOUNT;
+
+		default:
+			return "";
+	}
+}
+
 export function tokenAddress(vertical: String): any {
 	switch (vertical) {
 		case "stakePool":

@@ -10,6 +10,7 @@ import {
 	poolID,
 	salaryToCheck,
 	tokenAddress,
+	accountAddress,
 } from "../helpers/helperFunctions";
 import { Button, Space, notification, Table } from "antd";
 import { dataFormat } from "../helpers/interfaces";
@@ -17,7 +18,7 @@ import Column from "antd/lib/table/Column";
 import { number } from "yargs";
 declare let window: any;
 
-function StakeDAOSalary(params: any) {
+function VerticalSalary(params: any) {
 	const web3React = useWeb3React();
 
 	const [indexData, setIndexData] = useState<Array<any> | null>();
@@ -61,8 +62,8 @@ function StakeDAOSalary(params: any) {
                         }`,
 					variables: {
 						publisher: web3React.account,
-						token: process.env.REACT_APP_SDT,
-						indexId: process.env.REACT_APP_STAKEDAO_POOLID,
+						token: tokenAddress(params.vertical),
+						indexId: poolID(params.vertical),
 					},
 				},
 			}).then(async (result) => {
@@ -91,7 +92,7 @@ function StakeDAOSalary(params: any) {
 		if (
 			web3React.active
 			// &&
-			// web3React.account === process.env.REACT_APP_STAKEDAO_ACCOUNT
+			// web3React.account === accountAddress(params.vertical)
 		) {
 			GetData();
 		} else {
@@ -102,14 +103,14 @@ function StakeDAOSalary(params: any) {
 		return <div>Connect Wallet</div>;
 	}
 
-	// if (web3React.account !== process.env.REACT_APP_STAKEDAO_ACCOUNT) {
+	// if (web3React.account !== accountAddress(params.vertical)) {
 	// 	return <div>Please connect the stake dao account</div>;
 	// }
 
-	// if (indexData === undefined && state["stakePool"] === false) {
+	// if (indexData === undefined && state[params.vertical] === false) {
 	// 	return (
 	// 		<div>
-	// 			<PoolCreator vertical="stakePool" />
+	// 			<PoolCreator vertical=params.vertical />
 	// 		</div>
 	// 	);
 	// }
@@ -126,8 +127,8 @@ function StakeDAOSalary(params: any) {
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
 			usersNot.push({
-				address: element[addressToCheck("stakePool")].toLowerCase(),
-				salary: element[salaryToCheck("stakePool")],
+				address: element[addressToCheck(params.vertical)].toLowerCase(),
+				salary: element[salaryToCheck(params.vertical)],
 			});
 		}
 
@@ -141,7 +142,11 @@ function StakeDAOSalary(params: any) {
 					["bytes", "bytes"],
 					[
 						sf.agreements.ida.contract.methods
-							.createIndex(tokenAddress("stakePool"), poolID("stakePool"), "0x")
+							.createIndex(
+								tokenAddress(params.vertical),
+								poolID(params.vertical),
+								"0x"
+							)
 							.encodeABI(), // callData
 						"0x", // userData
 					]
@@ -200,8 +205,8 @@ function StakeDAOSalary(params: any) {
 		// 	for (let index = 0; index < params.data.length; index++) {
 		// 		const element = params.data[index];
 		// 		users.push({
-		// 			address: element[addressToCheck("stakePool")].toLowerCase(),
-		// 			salary: element[salaryToCheck("stakePool")],
+		// 			address: element[addressToCheck(params.vertical)].toLowerCase(),
+		// 			salary: element[salaryToCheck(params.vertical)],
 		// 		});
 		// 		notIn += 1;
 		// 	}
@@ -214,41 +219,41 @@ function StakeDAOSalary(params: any) {
 			const element = params.data[index];
 			if (
 				!activeSubscribers.includes(
-					element[addressToCheck("stakePool")].toLowerCase()
+					element[addressToCheck(params.vertical)].toLowerCase()
 				)
 			) {
 				// console.log("Including");
 				users.push({
-					address: element[addressToCheck("stakePool")].toLowerCase(),
-					salary: element[salaryToCheck("stakePool")],
+					address: element[addressToCheck(params.vertical)].toLowerCase(),
+					salary: element[salaryToCheck(params.vertical)],
 				});
 				notIn += 1;
 			} else {
 				//Check if the salary is different from what is present in the IDA
-				// console.log(element[addressToCheck("stakePool")].toLowerCase());
+				// console.log(element[addressToCheck(params.vertical)].toLowerCase());
 
 				let _indexCSV = params.data.findIndex(
 					(x: any) =>
-						x[addressToCheck("stakePool")].toLowerCase() ===
-						element[addressToCheck("stakePool")].toLowerCase()
+						x[addressToCheck(params.vertical)].toLowerCase() ===
+						element[addressToCheck(params.vertical)].toLowerCase()
 				);
 
 				let _index = _indexData["subscribers"].findIndex(
 					(x: any) =>
 						x["subscriber"] ===
-						element[addressToCheck("stakePool")].toLowerCase()
+						element[addressToCheck(params.vertical)].toLowerCase()
 				);
 
 				// console.log(_indexCSV);
-				// console.log(params.data[_indexCSV][salaryToCheck("stakePool")]);
+				// console.log(params.data[_indexCSV][salaryToCheck(params.vertical)]);
 				// console.log(_indexData["subscribers"][_index]["units"]);
 				if (
-					params.data[_indexCSV][salaryToCheck("stakePool")] !==
+					params.data[_indexCSV][salaryToCheck(params.vertical)] !==
 					_indexData["subscribers"][_index]["units"]
 				) {
 					users.push({
-						address: element[addressToCheck("stakePool")],
-						salary: params.data[_indexCSV][salaryToCheck("stakePool")],
+						address: element[addressToCheck(params.vertical)],
+						salary: params.data[_indexCSV][salaryToCheck(params.vertical)],
 					});
 					mod += 1;
 				}
@@ -269,7 +274,7 @@ function StakeDAOSalary(params: any) {
 		}
 		for (let index = 0; index < users.length; index++) {
 			const element = users[index];
-			// console.log(poolID("stakePool"));
+			// console.log(poolID(params.vertical));
 			temp.push([
 				201,
 				sf.agreements.ida.address,
@@ -278,8 +283,8 @@ function StakeDAOSalary(params: any) {
 					[
 						sf.agreements.ida.contract.methods
 							.updateSubscription(
-								tokenAddress("stakePool"),
-								poolID("stakePool"),
+								tokenAddress(params.vertical),
+								poolID(params.vertical),
 								element["address"],
 								element["salary"],
 								"0x"
@@ -302,7 +307,7 @@ function StakeDAOSalary(params: any) {
 
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
-			payment += Number(element[salaryToCheck("stakePool")]);
+			payment += Number(element[salaryToCheck(params.vertical)]);
 		}
 
 		return <div>Amount to be paid {payment}</div>;
@@ -313,17 +318,17 @@ function StakeDAOSalary(params: any) {
 		setLoadingState(true);
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
-			payment += Number(element[salaryToCheck("stakePool")]);
+			payment += Number(element[salaryToCheck(params.vertical)]);
 		}
 		// console.log(payment);
 		// console.log(web3.utils.toWei(payment.toString(), "ether"));
 		const bob = sf.user({
 			address: web3React.account,
-			token: tokenAddress("stakePool"),
+			token: tokenAddress(params.vertical),
 		});
 		await bob
 			.distributeToPool({
-				poolId: poolID("stakePool"),
+				poolId: poolID(params.vertical),
 				amount: web3.utils.toWei(payment.toString(), "ether"),
 			})
 			.then((response: any) => {
@@ -338,7 +343,7 @@ function StakeDAOSalary(params: any) {
 			});
 		// await sf.ida
 		// 	.distribute({
-		// 		superToken: tokenAddress("stakePool"),
+		// 		superToken: tokenAddress(params.vertical),
 		// 		indexId: poolID("stalePool"),
 		// 		amount: web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether")), // amount to distribute
 		// 		publisher: web3React.account, // the Publisher
@@ -406,8 +411,8 @@ function StakeDAOSalary(params: any) {
 					<Column title="Name" dataIndex="name" key="name" />
 					<Column
 						title="Salary"
-						dataIndex={salaryToCheck("stakePool")}
-						key={salaryToCheck("stakePool")}
+						dataIndex={salaryToCheck(params.vertical)}
+						key={salaryToCheck(params.vertical)}
 					/>
 				</Table>
 			</Space>
@@ -415,7 +420,7 @@ function StakeDAOSalary(params: any) {
 	);
 }
 
-export default StakeDAOSalary;
+export default VerticalSalary;
 //Parse the results
 //Fetch data from the IDA
 //If there are people missing from the pool show a prompt to add them
