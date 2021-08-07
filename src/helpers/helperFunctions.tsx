@@ -58,6 +58,6 @@ export function addressToCheck(vertical: String): any {
 			return "rekt_salary";
 
 		default:
-			return "";
+			return "yo";
 	}
 }
