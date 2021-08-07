@@ -1,0 +1,36 @@
+export interface dataFormat {
+	address_contributor_superfluid_rekt: string;
+	address_contributor_superfluid_sd_for_blackpool: string;
+	address_contributor_superfluid_sd_for_stakedao: string;
+	allocation: string;
+	base_address: string;
+	blackpool_allocation: string;
+	blackpool_salary: string;
+	field_of_activity: string;
+	future_rekt_allocation: string;
+	monthly_escrow_vesting_in_sdt: string;
+	monthly_escrow_vesting_in_usd: string;
+	monthly_stakedao_superfluid_in_sdt: string;
+	monthly_stakedao_superfluid_in_usd: string;
+	monthly_vesting_bpt_in_usd: string;
+	monthly_vesting_in_bpt: string;
+	name: string;
+	nda_signature_date: string;
+	rekt_allocation: string;
+	rekt_salary: string;
+	sdt_sent_back_to_the_foundation: string;
+	stake_dao_salary: string;
+	start_date: string;
+	superfluid_amound: string;
+	superfluid_duration: string;
+	tg_handle: string;
+	total_compensation: string;
+	total_equity_bonus_usd_month: string;
+	total_equity_sdt: string;
+	total_rewards: string;
+	total_stakedao_equity_in_usd: string;
+	type_of_activity: string;
+	vesting_period__months_: string;
+	vesting_period__months__for_blackpool: string;
+	vesting_period__months__for_rekt: string;
+}

@@ -11,7 +11,10 @@ import {
 	salaryToCheck,
 	tokenAddress,
 } from "../helpers/helperFunctions";
-import { Button, Space, notification } from "antd";
+import { Button, Space, notification, Table } from "antd";
+import { dataFormat } from "../helpers/interfaces";
+import Column from "antd/lib/table/Column";
+import { number } from "yargs";
 declare let window: any;
 
 function StakeDAOSalary(params: any) {
@@ -144,7 +147,7 @@ function StakeDAOSalary(params: any) {
 					]
 				),
 			]);
-			console.log(temp);
+			// console.log(temp);
 			await sf.host
 				.batchCall(temp, { from: web3React.account })
 				.then((response: any) => {
@@ -352,51 +355,61 @@ function StakeDAOSalary(params: any) {
 	return (
 		<div>
 			<Space direction="vertical">
-				{progress === "createPool" ? (
-					<Button onClick={CreateIndex} type="primary" loading={loadingState}>
-						Create Pool
-					</Button>
-				) : (
-					<Button onClick={CreateIndex} disabled>
-						Create Pool
-					</Button>
-				)}
-				{progress === "modifyPoolMembers" ? (
-					<>
-						<div>New Users: {newUsers}</div>
-						<br />
-						<div>Modify Users: {modifyUser}</div>
-						<br />
-						<Button
-							onClick={AddUsersToPool}
-							type="primary"
-							loading={loadingState}
-						>
+				<Space direction="horizontal">
+					{progress === "createPool" ? (
+						<Button onClick={CreateIndex} type="primary" loading={loadingState}>
+							Create Pool
+						</Button>
+					) : (
+						<Button onClick={CreateIndex} disabled>
+							Create Pool
+						</Button>
+					)}
+					{progress === "modifyPoolMembers" ? (
+						<>
+							<div>New Users: {newUsers}</div>
+							<br />
+							<div>Modify Users: {modifyUser}</div>
+							<br />
+							<Button
+								onClick={AddUsersToPool}
+								type="primary"
+								loading={loadingState}
+							>
+								Modify Pool Members
+							</Button>
+						</>
+					) : (
+						<Button onClick={AddUsersToPool} disabled>
 							Modify Pool Members
 						</Button>
-					</>
-				) : (
-					<Button onClick={AddUsersToPool} disabled>
-						Modify Pool Members
-					</Button>
-				)}
-				{progress === "disburseReady" ? (
-					<>
-						{AmountToBePaid()}
-						<br />
-						<Button
-							onClick={ReleaseThePayment}
-							type="primary"
-							loading={loadingState}
-						>
+					)}
+					{progress === "disburseReady" ? (
+						<>
+							{AmountToBePaid()}
+							<br />
+							<Button
+								onClick={ReleaseThePayment}
+								type="primary"
+								loading={loadingState}
+							>
+								Disburse Amount
+							</Button>
+						</>
+					) : (
+						<Button onClick={ReleaseThePayment} disabled>
 							Disburse Amount
 						</Button>
-					</>
-				) : (
-					<Button onClick={ReleaseThePayment} disabled>
-						Disburse Amount
-					</Button>
-				)}
+					)}
+				</Space>
+				<Table<dataFormat> dataSource={params.data}>
+					<Column title="Name" dataIndex="name" key="name" />
+					<Column
+						title="Salary"
+						dataIndex={salaryToCheck("stakePool")}
+						key={salaryToCheck("stakePool")}
+					/>
+				</Table>
 			</Space>
 		</div>
 	);

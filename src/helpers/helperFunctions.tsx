@@ -33,13 +33,13 @@ export function tokenAddress(vertical: String): any {
 export function salaryToCheck(vertical: String): any {
 	switch (vertical) {
 		case "stakePool":
-			return "stake dao salary";
+			return "stake_dao_salary";
 
 		case "blackPool":
-			return "blackpool salary";
+			return "blackpool_salary";
 
 		case "rektPool":
-			return "rekt salary";
+			return "rekt_salary";
 
 		default:
 			return "";
@@ -49,13 +49,13 @@ export function salaryToCheck(vertical: String): any {
 export function addressToCheck(vertical: String): any {
 	switch (vertical) {
 		case "stakePool":
-			return "address contributor superfluid sd for stakedao";
+			return "address_contributor_superfluid_sd_for_stakedao";
 
 		case "blackPool":
-			return "blackpool salary";
+			return "blackpool_salary";
 
 		case "rektPool":
-			return "rekt salary";
+			return "rekt_salary";
 
 		default:
 			return "";

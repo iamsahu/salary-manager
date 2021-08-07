@@ -55,7 +55,8 @@ function DataDisplay(params: any) {
 		header: true,
 		// dynamicTyping: true,
 		// skipEmptyLines: true,
-		transformHeader: (header: string) => header.toLowerCase(),
+		transformHeader: (header: string) =>
+			header.toLowerCase().replace(/\W/g, "_"),
 	};
 	function callback(key: string) {
 		console.log(key);
