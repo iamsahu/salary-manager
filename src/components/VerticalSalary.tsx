@@ -16,6 +16,8 @@ import { Button, Space, notification, Table } from "antd";
 import { dataFormat } from "../helpers/interfaces";
 import Column from "antd/lib/table/Column";
 import { number } from "yargs";
+import { Content } from "antd/lib/layout/layout";
+import UpgradeToken from "./UpgradeToken";
 declare let window: any;
 
 function VerticalSalary(params: any) {
@@ -358,9 +360,12 @@ function VerticalSalary(params: any) {
 	}
 
 	return (
-		<div>
+		<Content
+			style={{ padding: "20px 20px", background: "#fff", minHeight: "80vh" }}
+		>
 			<Space direction="vertical">
 				<Space direction="horizontal">
+					<UpgradeToken />
 					{progress === "createPool" ? (
 						<Button onClick={CreateIndex} type="primary" loading={loadingState}>
 							Create Pool
@@ -371,11 +376,7 @@ function VerticalSalary(params: any) {
 						</Button>
 					)}
 					{progress === "modifyPoolMembers" ? (
-						<>
-							<div>New Users: {newUsers}</div>
-							<br />
-							<div>Modify Users: {modifyUser}</div>
-							<br />
+						<Space direction="vertical" size="small">
 							<Button
 								onClick={AddUsersToPool}
 								type="primary"
@@ -383,16 +384,18 @@ function VerticalSalary(params: any) {
 							>
 								Modify Pool Members
 							</Button>
-						</>
+							<br />
+							<div>New Users: {newUsers}</div>
+							<br />
+							<div>Modify Users: {modifyUser}</div>
+						</Space>
 					) : (
 						<Button onClick={AddUsersToPool} disabled>
 							Modify Pool Members
 						</Button>
 					)}
 					{progress === "disburseReady" ? (
-						<>
-							{AmountToBePaid()}
-							<br />
+						<Space direction="vertical" size="small">
 							<Button
 								onClick={ReleaseThePayment}
 								type="primary"
@@ -400,7 +403,9 @@ function VerticalSalary(params: any) {
 							>
 								Disburse Amount
 							</Button>
-						</>
+							<br />
+							{AmountToBePaid()}
+						</Space>
 					) : (
 						<Button onClick={ReleaseThePayment} disabled>
 							Disburse Amount
@@ -416,7 +421,7 @@ function VerticalSalary(params: any) {
 					/>
 				</Table>
 			</Space>
-		</div>
+		</Content>
 	);
 }
 

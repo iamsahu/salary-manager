@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Layout, Button, Tag, Menu } from "antd";
+import { Layout, Button, Tag, Menu, Space } from "antd";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "./helpers/connector";
 import { SFProvider } from "./helpers/sfcontext";
@@ -16,6 +16,7 @@ import SuperfluidSDK from "@superfluid-finance/js-sdk";
 // } from "@ant-design/icons";
 import DataDisplay from "./components/DataDisplay";
 import Framework from "@superfluid-finance/js-sdk/src/Framework";
+import Title from "antd/lib/typography/Title";
 
 const { Header, Content, Footer, Sider } = Layout;
 declare let window: any;
@@ -73,7 +74,15 @@ function App() {
 	}
 
 	if (SF === undefined) {
-		return <div>Loading Superfluid!</div>;
+		return (
+			<div className="App">
+				<Content style={{ minHeight: "83vh" }}>
+					<Space direction="vertical" align="center">
+						<Title>Loading Superfluid!</Title>
+					</Space>
+				</Content>
+			</div>
+		);
 	}
 
 	return (
@@ -88,7 +97,11 @@ function App() {
 								<></>
 							)}
 						</Header>
-						<Content>{!web3React.active ? <></> : <DataDisplay />}</Content>
+						<Content style={{ minHeight: "80vh" }}>
+							<Space direction="vertical">
+								{!web3React.active ? <></> : <DataDisplay />}
+							</Space>
+						</Content>
 						<Footer></Footer>
 					</Layout>
 				</StateProvider>

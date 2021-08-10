@@ -4,6 +4,7 @@ import { Tabs } from "antd";
 import CSVReader from "react-csv-reader";
 // import axios from "axios";
 import VerticalSalary from "./VerticalSalary";
+import { Content } from "antd/lib/layout/layout";
 
 const { TabPane } = Tabs;
 
@@ -62,7 +63,12 @@ function DataDisplay(params: any) {
 		console.log(key);
 	}
 	return (
-		<div>
+		<Content
+			style={{
+				padding: "20px 20px",
+				background: "#fff",
+			}}
+		>
 			{/* <Button onClick={() => openFileSelector()}>Open the Payout File</Button> */}
 			{/* <CSVReader
 				onFileLoaded={(data, fileInfo) => console.dir(data, fileInfo)}
@@ -95,7 +101,7 @@ function DataDisplay(params: any) {
 					</Tabs>
 				</>
 			)}
-		</div>
+		</Content>
 	);
 }
 
