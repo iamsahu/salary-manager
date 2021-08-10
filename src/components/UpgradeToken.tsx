@@ -16,7 +16,7 @@ function UpgradeToken(params: any) {
 	const openNotification = () => {
 		notification["success"]({
 			message: "Success!",
-			description: "Beneficiary added successfully!",
+			description: "Token upgrade successful!",
 			duration: 2.5,
 			onClick: () => {
 				console.log("Notification Clicked!");
@@ -26,7 +26,7 @@ function UpgradeToken(params: any) {
 	const openFailNotification = () => {
 		notification["error"]({
 			message: "Fail!",
-			description: "Beneficiary addition failed!",
+			description: "Token upgrade failed!",
 			duration: 2.5,
 			onClick: () => {
 				console.log("Notification Clicked!");
@@ -83,10 +83,12 @@ function UpgradeToken(params: any) {
 							.then((response: any) => {
 								setConfirmLoading(false);
 								setVisible(false);
+								openNotification();
 							})
 							.catch((error: any) => {
 								setConfirmLoading(false);
 								setVisible(false);
+								openFailNotification();
 							});
 					})
 					.catch((error: any) => {
@@ -110,7 +112,7 @@ function UpgradeToken(params: any) {
 				confirmLoading={confirmLoading}
 			>
 				<Form form={form} layout="vertical" name="userForm" onFinish={onFinish}>
-					<Form.Item name="Amount" label="amount" rules={[{ required: true }]}>
+					<Form.Item name="Amount" label="Amount" rules={[{ required: true }]}>
 						<Input />
 					</Form.Item>
 				</Form>

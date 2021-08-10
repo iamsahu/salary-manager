@@ -2,8 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { useWeb3React } from "@web3-react/core";
 import axios from "axios";
 import sfcontext from "../helpers/sfcontext";
-import statecontext from "../helpers/statecontext";
-import PoolCreator from "./PoolCreator";
 import Web3 from "web3";
 import {
 	addressToCheck,
@@ -15,7 +13,6 @@ import {
 import { Button, Space, notification, Table } from "antd";
 import { dataFormat } from "../helpers/interfaces";
 import Column from "antd/lib/table/Column";
-import { number } from "yargs";
 import { Content } from "antd/lib/layout/layout";
 import UpgradeToken from "./UpgradeToken";
 declare let window: any;
@@ -26,7 +23,6 @@ function VerticalSalary(params: any) {
 	const [indexData, setIndexData] = useState<Array<any> | null>();
 	const [poolExists, setPoolExists] = useState(false);
 	const sf = useContext<any>(sfcontext);
-	const [state, setState] = useContext(statecontext);
 	const [progress, setProgress] = useState("loading");
 	const [loadingState, setLoadingState] = useState(false);
 	const [newUsers, setNewUsers] = useState(0);
@@ -432,7 +428,7 @@ export default VerticalSalary;
 //If all the members are added to the pool provide the option of releasing the payment
 
 // {
-//   indexes(where:{indexId:3,token:"0x0F1D7C55A2B133E000eA10EeC03c774e0d6796e8",publisher:"0xDa1495EBD7573D8E7f860862BaA3aBecebfa02E0"}){
+//   indexes(where:{indexId:3,token:"0x8ef4F0C0753048a39B4Bc4eB3f545Fdae00618B7",publisher:"0xDa1495EBD7573D8E7f860862BaA3aBecebfa02E0"}){
 //     subscribers{
 //       subscriber
 //       totalPendingApproval
