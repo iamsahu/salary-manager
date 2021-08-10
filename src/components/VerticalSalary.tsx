@@ -27,6 +27,7 @@ function VerticalSalary(params: any) {
 	const [loadingState, setLoadingState] = useState(false);
 	const [newUsers, setNewUsers] = useState(0);
 	const [modifyUser, setModifyUser] = useState(0);
+	const [removeUser, setRemoveUser] = useState(0);
 	var web3 = new Web3(window.ethereum);
 
 	const openNotification = (msg: string) => {
@@ -76,7 +77,7 @@ function VerticalSalary(params: any) {
 						result.data.data.indexes[0],
 						true
 					);
-					console.log(usersNot);
+					// console.log(usersNot);
 					if (usersNot.length > 0) {
 						setProgress("modifyPoolMembers");
 					} else {
@@ -196,20 +197,6 @@ function VerticalSalary(params: any) {
 		let users: any[] = [];
 		let notIn: number = 0;
 		let mod: number = 0;
-		// if (firstLoad) {
-		// 	return users;
-		// }
-		// if (_indexData) {
-		// 	for (let index = 0; index < params.data.length; index++) {
-		// 		const element = params.data[index];
-		// 		users.push({
-		// 			address: element[addressToCheck(params.vertical)].toLowerCase(),
-		// 			salary: element[salaryToCheck(params.vertical)],
-		// 		});
-		// 		notIn += 1;
-		// 	}
-		// 	return users;
-		// }
 
 		let activeSubscribers = _indexData["activeSubscribers"];
 
@@ -259,7 +246,29 @@ function VerticalSalary(params: any) {
 		}
 		setModifyUser(mod);
 		setNewUsers(notIn);
+		console.log(users);
 		//TODO: Code for finding if any users were removed from the pool
+		let id = -1;
+		let rem = 0;
+		for (let index = 0; index < activeSubscribers.length; index++) {
+			const element = activeSubscribers[index];
+			id = params.data.findIndex(
+				(x: any) =>
+					x[addressToCheck(params.vertical)].toLowerCase() ===
+					element.toLowerCase()
+			);
+			if (id === -1) {
+				//We found a user who is present in the pool but not in the csv
+				users.push({
+					address: element,
+					salary: "0",
+				});
+				rem += 1;
+				console.log("Removing: " + element);
+			}
+			id = -1;
+		}
+		setRemoveUser(rem);
 		// console.log(users);
 		return users;
 	}
@@ -384,6 +393,8 @@ function VerticalSalary(params: any) {
 							<div>New Users: {newUsers}</div>
 							<br />
 							<div>Modify Users: {modifyUser}</div>
+							<br />
+							<div>Remove Users: {removeUser}</div>
 						</Space>
 					) : (
 						<Button onClick={AddUsersToPool} disabled>

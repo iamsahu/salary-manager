@@ -72,26 +72,36 @@ function UpgradeToken(params: any) {
 		if (values.Amount > 0) {
 			// console.log(values);
 			if (typeof contractx !== undefined && typeof contract !== undefined)
+				// var tp = await contract
+				// 	.allowance(web3React.account, sT)
+				// 	.then((response: any) => console.log(response))
+				// 	.catch((error: any) => {
+				// 		console.log(error);
+				// 	});
 				await contract
 					.approve(
 						sT, //Super Token Address
 						Web3.utils.toWei((Number(values.Amount) + 1).toString())
 					)
 					.then(async (response: any) => {
+						console.log(response);
 						await contractx
 							.upgrade(Web3.utils.toWei(values.Amount))
 							.then((response: any) => {
+								console.log(response);
 								setConfirmLoading(false);
 								setVisible(false);
 								openNotification();
 							})
 							.catch((error: any) => {
+								console.log(error);
 								setConfirmLoading(false);
 								setVisible(false);
 								openFailNotification();
 							});
 					})
 					.catch((error: any) => {
+						console.log(error);
 						setConfirmLoading(false);
 						setVisible(false);
 					});
