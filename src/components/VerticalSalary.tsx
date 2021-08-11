@@ -246,7 +246,7 @@ function VerticalSalary(params: any) {
 		}
 		setModifyUser(mod);
 		setNewUsers(notIn);
-		console.log(users);
+		// console.log(users);
 		//TODO: Code for finding if any users were removed from the pool
 		let id = -1;
 		let rem = 0;
@@ -264,7 +264,7 @@ function VerticalSalary(params: any) {
 					salary: "0",
 				});
 				rem += 1;
-				console.log("Removing: " + element);
+				// console.log("Removing: " + element);
 			}
 			id = -1;
 		}
@@ -276,31 +276,56 @@ function VerticalSalary(params: any) {
 	function BatchCallForAddingUsers(users: any[]): any[] {
 		let temp: any = [];
 		if (users.length <= 0) {
-			console.log("Hogaya!");
+			console.log("No users to be added!");
 			return [];
 		}
+		console.log(users);
 		for (let index = 0; index < users.length; index++) {
 			const element = users[index];
 			// console.log(poolID(params.vertical));
-			temp.push([
-				201,
-				sf.agreements.ida.address,
-				web3.eth.abi.encodeParameters(
-					["bytes", "bytes"],
-					[
-						sf.agreements.ida.contract.methods
-							.updateSubscription(
-								tokenAddress(params.vertical),
-								poolID(params.vertical),
-								element["address"],
-								element["salary"],
-								"0x"
-							)
-							.encodeABI(), // callData
-						"0x", // userData
-					]
-				),
-			]);
+			if (element["salary"] == "0") {
+				temp.push([
+					201,
+					sf.agreements.ida.address,
+					web3.eth.abi.encodeParameters(
+						["bytes", "bytes"],
+						[
+							sf.agreements.ida.contract.methods
+								.deleteSubscription(
+									tokenAddress(params.vertical),
+									web3React.account,
+									poolID(params.vertical),
+									element["address"],
+									"0x"
+								)
+								.encodeABI(), // callData
+							"0x", // userData
+						]
+					),
+				]);
+				// console.log("Deleting");
+			} else {
+				temp.push([
+					201,
+					sf.agreements.ida.address,
+					web3.eth.abi.encodeParameters(
+						["bytes", "bytes"],
+						[
+							sf.agreements.ida.contract.methods
+								.updateSubscription(
+									tokenAddress(params.vertical),
+									poolID(params.vertical),
+									element["address"],
+									element["salary"],
+									"0x"
+								)
+								.encodeABI(), // callData
+							"0x", // userData
+						]
+					),
+				]);
+				// console.log("Adding");
+			}
 		}
 		return temp;
 		// await sf.host
@@ -318,6 +343,31 @@ function VerticalSalary(params: any) {
 		}
 
 		return <div>Amount to be paid {payment}</div>;
+	}
+
+	async function del() {
+		const bob = sf.user({
+			address: web3React.account,
+			token: tokenAddress(params.vertical),
+		});
+		await sf.ida
+			.deleteSubscription({
+				superToken: tokenAddress(params.vertical),
+				indexId: poolID(params.vertical),
+				publisher: web3React.account,
+				subscriber: "0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6",
+				sender: web3React.account,
+			})
+			.then((response: any) => {
+				console.log(response);
+				setProgress("completed");
+				setLoadingState(false);
+				openNotification("Amount disbursed!");
+			})
+			.catch((error: any) => {
+				console.log(error);
+				setLoadingState(false);
+			});
 	}
 
 	async function ReleaseThePayment() {
@@ -401,6 +451,7 @@ function VerticalSalary(params: any) {
 							Modify Pool Members
 						</Button>
 					)}
+
 					{progress === "disburseReady" ? (
 						<Space direction="vertical" size="small">
 							<Button
@@ -439,7 +490,8 @@ export default VerticalSalary;
 //If all the members are added to the pool provide the option of releasing the payment
 
 // {
-//   indexes(where:{indexId:3,token:"0x8ef4F0C0753048a39B4Bc4eB3f545Fdae00618B7",publisher:"0xDa1495EBD7573D8E7f860862BaA3aBecebfa02E0"}){
+//   indexes(where:{indexId:0,token:"0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f",publisher:"0xea1AE04250b3381A0dD7382b69B68B2EbD44dB6c"}){
+// activeSubscribers;
 //     subscribers{
 //       subscriber
 //       totalPendingApproval
