@@ -16,6 +16,8 @@
     "@types/react-dom": "^17.0.0",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
+    "ajv": "^8.6.2",
+    "ajv-formats": "^2.1.0",
     "antd": "^4.16.10",
     "axios": "^0.21.1",
     "react": "^17.0.2",

@@ -15,11 +15,13 @@ import { dataFormat } from "../helpers/interfaces";
 import Column from "antd/lib/table/Column";
 import { Content } from "antd/lib/layout/layout";
 import UpgradeToken from "./UpgradeToken";
+import { Payouts } from "../helpers/validator";
+
 declare let window: any;
 
 function VerticalSalary(params: any) {
 	const web3React = useWeb3React();
-
+	console.log(params);
 	const [indexData, setIndexData] = useState<Array<any> | null>();
 	const [poolExists, setPoolExists] = useState(false);
 	const sf = useContext<any>(sfcontext);
@@ -470,7 +472,7 @@ function VerticalSalary(params: any) {
 						</Button>
 					)}
 				</Space>
-				<Table<dataFormat> dataSource={params.data}>
+				<Table<Payouts> dataSource={params.data}>
 					<Column title="Name" dataIndex="name" key="name" />
 					<Column
 						title="Salary"

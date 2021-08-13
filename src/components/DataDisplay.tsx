@@ -5,6 +5,7 @@ import CSVReader from "react-csv-reader";
 // import axios from "axios";
 import VerticalSalary from "./VerticalSalary";
 import { Content } from "antd/lib/layout/layout";
+import { Payouts, validate } from "../helpers/validator";
 
 const { TabPane } = Tabs;
 
@@ -12,8 +13,19 @@ function DataDisplay(params: any) {
 	const [data, setdata] = useState<Array<any> | null>(null);
 
 	function handleForce(params: any) {
-		// console.log(params);
-		setdata(params);
+		console.log(params);
+		let obj2: Payouts[] = [];
+		let obj: Payouts[] = params;
+		for (let index = 0; index < obj.length; index++) {
+			const element = obj[index];
+			if (validate(element)) {
+				obj2.push(element);
+			} else {
+				console.log("hello");
+				console.log(validate.errors);
+			}
+		}
+		setdata(obj2);
 	}
 	function handleDarkSideForce(params: any) {
 		console.log(params);
