@@ -47,7 +47,8 @@ function DataDisplay(params: any) {
 				background: "#fff",
 			}}
 		>
-			{data === null ? (
+			{/* {data === null ? ( */}
+			<>
 				<CSVReader
 					cssClass="csv-reader-input"
 					label="Select CSV"
@@ -58,22 +59,20 @@ function DataDisplay(params: any) {
 					inputName="ObiWan"
 					inputStyle={{ color: "red" }}
 				/>
-			) : (
-				<>
-					<div>Total {data.length} records detected</div> <br />
-					<Tabs defaultActiveKey="1" onChange={callback}>
-						<TabPane tab="StakeDAO" key="1">
-							<VerticalSalary data={data} vertical={"stakePool"} />
-						</TabPane>
-						<TabPane tab="BlackPool" key="2">
-							Coming soon!
-						</TabPane>
-						<TabPane tab="rekt" key="3">
-							Coming soon!
-						</TabPane>
-					</Tabs>
-				</>
-			)}
+				<div>Total {data === null ? "" : data.length} records detected</div>{" "}
+				<br />
+				<Tabs defaultActiveKey="1" onChange={callback}>
+					<TabPane tab="StakeDAO" key="1">
+						<VerticalSalary data={data} vertical={"stakePool"} />
+					</TabPane>
+					<TabPane tab="BlackPool" key="2">
+						Coming soon!
+					</TabPane>
+					<TabPane tab="rekt" key="3">
+						Coming soon!
+					</TabPane>
+				</Tabs>
+			</>
 		</Content>
 	);
 }

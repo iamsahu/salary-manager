@@ -45,6 +45,10 @@ function VerticalSalary(params: any) {
 	useEffect(() => {
 		async function GetData() {
 			//Write code here to get the data
+
+			if (params.data === null) {
+				return;
+			}
 			axios({
 				url: process.env.REACT_APP_GRAPHQL_IDA,
 				method: "post",
@@ -68,7 +72,7 @@ function VerticalSalary(params: any) {
 					},
 				},
 			}).then(async (result) => {
-				// console.log(result.data.data["indexes"][0]);
+				console.log(result.data.data["indexes"][0]);
 				//Based on count determine whether pool needs to be created or not
 				//If pool exists
 				if (result.data.data["indexes"].length > 0) {
@@ -98,7 +102,7 @@ function VerticalSalary(params: any) {
 			GetData();
 		} else {
 		}
-	}, [web3React.active, web3React.account, poolExists]);
+	}, [web3React.active, web3React.account, poolExists, params.data]);
 
 	if (!web3React.active) {
 		return <div>Connect Wallet</div>;

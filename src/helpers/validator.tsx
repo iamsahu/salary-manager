@@ -6,7 +6,7 @@ const ajv = new Ajv();
 addFormats(ajv);
 
 ajv.addFormat("address", {
-	validate: (x: string) => Web3.utils.isAddress(x) || x === "",
+	validate: (x: string) => Web3.utils.isAddress(x) || x === "" || x === "0x",
 });
 
 ajv.addFormat("num", {
