@@ -48,6 +48,7 @@ export interface Payouts {
 	vesting_period__months_?: string;
 	vesting_period__months__for_blackpool?: string;
 	vesting_period__months__for_rekt?: string;
+	state?: string;
 }
 
 export const schema: JSONSchemaType<Payouts> = {
@@ -139,6 +140,7 @@ export const schema: JSONSchemaType<Payouts> = {
 			format: "num",
 			nullable: true,
 		},
+		state: { type: "string", nullable: true },
 	},
 	required: [],
 	additionalProperties: false,

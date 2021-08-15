@@ -10,7 +10,7 @@ import {
 	tokenAddress,
 	accountAddress,
 } from "../helpers/helperFunctions";
-import { Button, Space, notification, Table } from "antd";
+import { Button, Space, notification, Table, Tag } from "antd";
 import { dataFormat } from "../helpers/interfaces";
 import Column from "antd/lib/table/Column";
 import { Content } from "antd/lib/layout/layout";
@@ -30,6 +30,7 @@ function VerticalSalary(params: any) {
 	const [newUsers, setNewUsers] = useState(0);
 	const [modifyUser, setModifyUser] = useState(0);
 	const [removeUser, setRemoveUser] = useState(0);
+	const [csvData, setcsvData] = useState<Array<any> | null>([]);
 	var web3 = new Web3(window.ethereum);
 
 	const openNotification = (msg: string) => {
@@ -48,6 +49,7 @@ function VerticalSalary(params: any) {
 
 			if (params.data === null) {
 				return;
+			} else {
 			}
 			axios({
 				url: process.env.REACT_APP_GRAPHQL_IDA,
@@ -79,13 +81,31 @@ function VerticalSalary(params: any) {
 					//Set Index Data
 					setIndexData(result.data.data.indexes[0]);
 					//Calculate whether new members need to be added
-					let usersNot: any[] = FindUsersNotInPool(
-						result.data.data.indexes[0],
-						true
-					);
+					let usersNot: any[] = FindUsersNotInPool(result.data.data.indexes[0]);
 					// console.log(usersNot);
+					let temp: any[] = [];
 					if (usersNot.length > 0) {
 						setProgress("modifyPoolMembers");
+						for (let index = 0; index < params.data.length; index++) {
+							let element = params.data[index];
+							let ind = usersNot.findIndex(
+								(x: any) =>
+									x["address"].toLowerCase() ===
+									element[addressToCheck(params.vertical)].toLowerCase()
+							);
+							if (ind === -1) {
+								element["state"] = "good";
+							} else {
+								element["state"] = usersNot[ind]["state"];
+								// if (usersNot[ind]["salary"] === "0") {
+								// 	element["state"] = "remove";
+								// } else {
+								// 	element["state"] = "salaryMod";
+								// }
+							}
+							temp.push(element);
+						}
+						setcsvData(temp);
 					} else {
 						setProgress("disburseReady");
 					}
@@ -99,6 +119,7 @@ function VerticalSalary(params: any) {
 			// &&
 			// web3React.account === accountAddress(params.vertical)
 		) {
+			setcsvData(params.data);
 			GetData();
 		} else {
 		}
@@ -199,7 +220,7 @@ function VerticalSalary(params: any) {
 		}
 	}
 
-	function FindUsersNotInPool(_indexData: any, firstLoad = false): any[] {
+	function FindUsersNotInPool(_indexData: any): any[] {
 		let users: any[] = [];
 		let notIn: number = 0;
 		let mod: number = 0;
@@ -217,6 +238,7 @@ function VerticalSalary(params: any) {
 				users.push({
 					address: element[addressToCheck(params.vertical)].toLowerCase(),
 					salary: element[salaryToCheck(params.vertical)],
+					state: "new",
 				});
 				notIn += 1;
 			} else {
@@ -245,6 +267,8 @@ function VerticalSalary(params: any) {
 					users.push({
 						address: element[addressToCheck(params.vertical)],
 						salary: params.data[_indexCSV][salaryToCheck(params.vertical)],
+						state: "salaryMod",
+						oldSal: _indexData["subscribers"][_index]["units"],
 					});
 					mod += 1;
 				}
@@ -268,6 +292,7 @@ function VerticalSalary(params: any) {
 				users.push({
 					address: element,
 					salary: "0",
+					state: "remove",
 				});
 				rem += 1;
 				// console.log("Removing: " + element);
@@ -482,6 +507,38 @@ function VerticalSalary(params: any) {
 						title="Salary"
 						dataIndex={salaryToCheck(params.vertical)}
 						key={salaryToCheck(params.vertical)}
+					/>
+					<Column
+						title="State"
+						dataIndex="state"
+						key="state"
+						render={(text, record: Payouts) => {
+							if (record["state"] === "remove")
+								return (
+									<>
+										<Tag color="red">Remove</Tag>
+									</>
+								);
+							else if (record["state"] === "salaryMod")
+								return (
+									<>
+										<Tag color="orange">Salary Modification</Tag>
+									</>
+								);
+							else if (record["state"] === "new")
+								return (
+									<>
+										<Tag color="yellow">New</Tag>
+									</>
+								);
+							else if (record["state"] === "good")
+								return (
+									<>
+										<Tag color="green">Old Record</Tag>
+									</>
+								);
+							else return <></>;
+						}}
 					/>
 				</Table>
 			</Space>
