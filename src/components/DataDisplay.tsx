@@ -66,7 +66,7 @@ function DataDisplay(params: any) {
 						<VerticalSalary data={data} vertical={"stakePool"} />
 					</TabPane>
 					<TabPane tab="BlackPool" key="2">
-						Coming soon!
+						<VerticalSalary data={data} vertical={"blackPool"} />
 					</TabPane>
 					<TabPane tab="rekt" key="3">
 						Coming soon!

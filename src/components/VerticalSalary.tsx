@@ -74,7 +74,7 @@ function VerticalSalary(params: any) {
 					},
 				},
 			}).then(async (result) => {
-				console.log(result.data.data["indexes"][0]);
+				if (result.data.data["indexes"] === undefined) return;
 				//Based on count determine whether pool needs to be created or not
 				//If pool exists
 				if (result.data.data["indexes"].length > 0) {
@@ -129,9 +129,9 @@ function VerticalSalary(params: any) {
 		return <div>Connect Wallet</div>;
 	}
 
-	// if (web3React.account !== accountAddress(params.vertical)) {
-	// 	return <div>Please connect the stake dao account</div>;
-	// }
+	if (web3React.account !== accountAddress(params.vertical)) {
+		return <div>Please connect the {params.vertical} account</div>;
+	}
 
 	// if (indexData === undefined && state[params.vertical] === false) {
 	// 	return (
@@ -451,7 +451,7 @@ function VerticalSalary(params: any) {
 		>
 			<Space direction="vertical">
 				<Space direction="horizontal">
-					<UpgradeToken />
+					<UpgradeToken vertical={params.vertical} />
 					{progress === "createPool" ? (
 						<Button onClick={CreateIndex} type="primary" loading={loadingState}>
 							Create Pool

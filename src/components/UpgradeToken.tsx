@@ -5,6 +5,7 @@ import ERC20 from "../abis/ERC20.json";
 import { useWeb3React } from "@web3-react/core";
 import { Form, Input, InputNumber, Modal, Button, notification } from "antd";
 import Web3 from "web3";
+import { superTokenAddress, tokenAddress } from "../helpers/helperFunctions";
 
 function UpgradeToken(params: any) {
 	const web3React = useWeb3React();
@@ -55,8 +56,8 @@ function UpgradeToken(params: any) {
 		// setVisible(false);
 		// setConfirmLoading(false);
 	};
-	let sT: any = process.env.REACT_APP_SDAM3CRVX;
-	let bT: any = process.env.REACT_APP_SDAM3CRV;
+	let sT: any = superTokenAddress(params.vertical); // process.env.REACT_APP_SDAM3CRVX;
+	let bT: any = tokenAddress(params.vertical); // process.env.REACT_APP_SDAM3CRV;
 	async function UpgradeToken(values: any) {
 		const contractx = new Contract(
 			sT, //Super Token Address
@@ -112,10 +113,10 @@ function UpgradeToken(params: any) {
 	return (
 		<>
 			<Button type="primary" onClick={showModal}>
-				Upgrade sdam3CRV
+				Upgrade {params.vertical === "stakePool" ? "SDT" : "BPT"}
 			</Button>
 			<Modal
-				title="Upgrade sdam3CRV to sdam3CRVx"
+				title="Upgrade to supertoken"
 				visible={visible}
 				onOk={onOk}
 				onCancel={onCancel}

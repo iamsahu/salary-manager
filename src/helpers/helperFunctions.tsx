@@ -46,6 +46,22 @@ export function tokenAddress(vertical: String): any {
 	}
 }
 
+export function superTokenAddress(vertical: String): any {
+	switch (vertical) {
+		case "stakePool":
+			return process.env.REACT_APP_SDTX;
+
+		case "blackPool":
+			return process.env.REACT_APP_BPTX;
+
+		case "rektPool":
+			return process.env.REACT_APP_REKTT;
+
+		default:
+			return "";
+	}
+}
+
 export function salaryToCheck(vertical: String): any {
 	switch (vertical) {
 		case "stakePool":
