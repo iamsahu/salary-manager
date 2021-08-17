@@ -74,6 +74,8 @@ function VerticalSalary(params: any) {
 					},
 				},
 			}).then(async (result) => {
+				if (result.data === undefined) return;
+				if (result.data.data === undefined) return;
 				if (result.data.data["indexes"] === undefined) return;
 				//Based on count determine whether pool needs to be created or not
 				//If pool exists
@@ -110,6 +112,13 @@ function VerticalSalary(params: any) {
 						setProgress("disburseReady");
 					}
 				} else {
+					let temp: any[] = [];
+					for (let index = 0; index < params.data.length; index++) {
+						let element = params.data[index];
+						element["state"] = "new";
+						temp.push(element);
+					}
+					setcsvData(temp);
 					setProgress("createPool");
 				}
 			});
@@ -502,7 +511,12 @@ function VerticalSalary(params: any) {
 					)}
 				</Space>
 				<Table<Payouts> dataSource={params.data}>
-					<Column title="Name" dataIndex="name" key="name" />
+					{/* <Column title="Name" dataIndex="name" key="name" /> */}
+					<Column
+						title="Address"
+						dataIndex={addressToCheck(params.vertical)}
+						key={addressToCheck(params.vertical)}
+					/>
 					<Column
 						title="Salary"
 						dataIndex={salaryToCheck(params.vertical)}

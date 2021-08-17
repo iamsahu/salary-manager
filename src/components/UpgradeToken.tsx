@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Contract } from "@ethersproject/contracts";
 import SuperToken from "../abis/SuperToken.json";
 import ERC20 from "../abis/ERC20.json";
 import { useWeb3React } from "@web3-react/core";
-import { Form, Input, InputNumber, Modal, Button, notification } from "antd";
+import {
+	Form,
+	Input,
+	InputNumber,
+	Modal,
+	Button,
+	notification,
+	Space,
+} from "antd";
 import Web3 from "web3";
 import { superTokenAddress, tokenAddress } from "../helpers/helperFunctions";
 
 function UpgradeToken(params: any) {
 	const web3React = useWeb3React();
-	const [visible, setVisible] = React.useState(false);
-	const [confirmLoading, setConfirmLoading] = React.useState(false);
-
+	const [visible, setVisible] = useState(false);
+	const [confirmLoading, setConfirmLoading] = useState(false);
+	const [tokBalance, setTokBalance] = useState("0");
 	const [form] = Form.useForm();
 
 	const openNotification = () => {
@@ -58,12 +66,34 @@ function UpgradeToken(params: any) {
 	};
 	let sT: any = superTokenAddress(params.vertical); // process.env.REACT_APP_SDAM3CRVX;
 	let bT: any = tokenAddress(params.vertical); // process.env.REACT_APP_SDAM3CRV;
+	let contractx = new Contract(
+		sT, //Super Token Address
+		SuperToken.abi,
+		web3React.library.getSigner()
+	);
+
+	useEffect(() => {
+		async function GetTokBalance() {
+			console.log(web3React.account);
+			await contractx
+				.balanceOf(web3React.account)
+				.then((response: any) => {
+					// console.log(response);
+					// console.log(Web3.utils.fromWei(Web3.utils.toBN(response)));
+					setTokBalance(Web3.utils.fromWei(Web3.utils.toBN(response)));
+					console.log("got balance");
+				})
+				.catch((error: any) => {
+					console.log(error);
+				});
+		}
+		GetTokBalance();
+	}, [setVisible]);
+
+	// const tokenInst = new web3.eth.Contract(tokenABI, token.address);
+	// const balance = await tokenInst.methods.balanceOf(address).call();
+
 	async function UpgradeToken(values: any) {
-		const contractx = new Contract(
-			sT, //Super Token Address
-			SuperToken.abi,
-			web3React.library.getSigner()
-		);
 		const contract = new Contract(
 			bT, //Base Token Address
 			ERC20.abi,
@@ -85,7 +115,7 @@ function UpgradeToken(params: any) {
 						Web3.utils.toWei((Number(values.Amount) + 1).toString())
 					)
 					.then(async (response: any) => {
-						console.log(response);
+						// console.log(response);
 						await contractx
 							.upgrade(Web3.utils.toWei(values.Amount))
 							.then((response: any) => {
@@ -110,11 +140,31 @@ function UpgradeToken(params: any) {
 		setConfirmLoading(false);
 		setVisible(false);
 	}
+
+	function TokenName(baseToken: string): string {
+		switch (baseToken) {
+			case "stakePool":
+				return "SDT";
+			case "stakePoolLP":
+				return "sdam3CRV";
+			case "blackPool":
+				return "BPT";
+			case "blackPoolLP":
+				return "sdam3CRV";
+			case "rektPool":
+				return "rekt_salary";
+			default:
+				return "";
+		}
+	}
 	return (
 		<>
-			<Button type="primary" onClick={showModal}>
-				Upgrade {params.vertical === "stakePool" ? "SDT" : "BPT"}
-			</Button>
+			<Space direction="vertical">
+				<Button type="primary" onClick={showModal}>
+					Upgrade {TokenName(params.vertical)}
+				</Button>
+				Your {TokenName(params.vertical)}x token balance: {tokBalance}
+			</Space>
 			<Modal
 				title="Upgrade to supertoken"
 				visible={visible}

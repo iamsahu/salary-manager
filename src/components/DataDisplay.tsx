@@ -1,5 +1,5 @@
 // import { useFilePicker } from "use-file-picker";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Tabs } from "antd";
 import CSVReader from "react-csv-reader";
 // import axios from "axios";
@@ -65,12 +65,18 @@ function DataDisplay(params: any) {
 					<TabPane tab="StakeDAO" key="1">
 						<VerticalSalary data={data} vertical={"stakePool"} />
 					</TabPane>
-					<TabPane tab="BlackPool" key="2">
+					<TabPane tab="StakeDAO LP" key="2">
+						<VerticalSalary data={data} vertical={"stakePoolLP"} />
+					</TabPane>
+					<TabPane tab="BlackPool" key="3">
 						<VerticalSalary data={data} vertical={"blackPool"} />
 					</TabPane>
-					<TabPane tab="rekt" key="3">
-						Coming soon!
+					<TabPane tab="BlackPool LP" key="4">
+						<VerticalSalary data={data} vertical={"blackPoolLP"} />
 					</TabPane>
+					{/* <TabPane tab="rekt" key="3">
+						Coming soon!
+					</TabPane> */}
 				</Tabs>
 			</>
 		</Content>
