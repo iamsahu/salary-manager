@@ -9,6 +9,7 @@ import {
 	salaryToCheck,
 	tokenAddress,
 	accountAddress,
+	superTokenAddress,
 } from "../helpers/helperFunctions";
 import { Button, Space, notification, Table, Tag } from "antd";
 import { dataFormat } from "../helpers/interfaces";
@@ -21,7 +22,7 @@ declare let window: any;
 
 function VerticalSalary(params: any) {
 	const web3React = useWeb3React();
-	console.log(params);
+	// console.log(params);
 	const [indexData, setIndexData] = useState<Array<any> | null>();
 	const [poolExists, setPoolExists] = useState(false);
 	const sf = useContext<any>(sfcontext);
@@ -69,7 +70,7 @@ function VerticalSalary(params: any) {
                         }`,
 					variables: {
 						publisher: web3React.account,
-						token: tokenAddress(params.vertical),
+						token: superTokenAddress(params.vertical),
 						indexId: poolID(params.vertical),
 					},
 				},
@@ -178,7 +179,7 @@ function VerticalSalary(params: any) {
 					[
 						sf.agreements.ida.contract.methods
 							.createIndex(
-								tokenAddress(params.vertical),
+								superTokenAddress(params.vertical),
 								poolID(params.vertical),
 								"0x"
 							)
@@ -187,7 +188,7 @@ function VerticalSalary(params: any) {
 					]
 				),
 			]);
-			// console.log(temp);
+			console.log(temp);
 			console.log("Address: " + web3React.account);
 			await sf.host
 				.batchCall(temp, { from: web3React.account })
@@ -333,7 +334,7 @@ function VerticalSalary(params: any) {
 						[
 							sf.agreements.ida.contract.methods
 								.deleteSubscription(
-									tokenAddress(params.vertical),
+									superTokenAddress(params.vertical),
 									web3React.account,
 									poolID(params.vertical),
 									element["address"],
@@ -344,7 +345,7 @@ function VerticalSalary(params: any) {
 						]
 					),
 				]);
-				// console.log("Deleting");
+				console.log("Deleting");
 			} else {
 				temp.push([
 					201,
@@ -354,7 +355,7 @@ function VerticalSalary(params: any) {
 						[
 							sf.agreements.ida.contract.methods
 								.updateSubscription(
-									tokenAddress(params.vertical),
+									superTokenAddress(params.vertical),
 									poolID(params.vertical),
 									element["address"],
 									element["salary"].trim(),
@@ -389,11 +390,11 @@ function VerticalSalary(params: any) {
 	async function del() {
 		const bob = sf.user({
 			address: web3React.account,
-			token: tokenAddress(params.vertical),
+			token: superTokenAddress(params.vertical),
 		});
 		await sf.ida
 			.deleteSubscription({
-				superToken: tokenAddress(params.vertical),
+				superToken: superTokenAddress(params.vertical),
 				indexId: poolID(params.vertical),
 				publisher: web3React.account,
 				subscriber: "0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6",
@@ -422,7 +423,7 @@ function VerticalSalary(params: any) {
 		// console.log(web3.utils.toWei(payment.toString(), "ether"));
 		const bob = sf.user({
 			address: web3React.account,
-			token: tokenAddress(params.vertical),
+			token: superTokenAddress(params.vertical),
 		});
 		await bob
 			.distributeToPool({

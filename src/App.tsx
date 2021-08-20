@@ -26,7 +26,7 @@ import { useSafeAppsSDK } from "@gnosis.pm/safe-apps-react-sdk";
 import { SafeAppProvider } from "@gnosis.pm/safe-apps-provider";
 import { Web3Provider } from "@ethersproject/providers";
 const { Header, Content, Footer, Sider } = Layout;
-const safeMultisigConnector = new SafeAppConnector();
+// const safeMultisigConnector = new SafeAppConnector();
 
 declare let window: any;
 function App() {
@@ -38,28 +38,28 @@ function App() {
 		rektPool: false,
 	});
 
-	const triedToConnectToSafe = useSafeAppConnection(safeMultisigConnector);
-	const { sdk, safe } = useSafeAppsSDK();
-	const web3Provider2 = useMemo(
-		() => new Web3Provider(new SafeAppProvider(safe, sdk)),
-		[sdk, safe]
-	);
+	// const triedToConnectToSafe = useSafeAppConnection(safeMultisigConnector);
+	// const { sdk, safe } = useSafeAppsSDK();
+	// const web3Provider2 = useMemo(
+	// 	() => new Web3Provider(new SafeAppProvider(safe, sdk)),
+	// 	[sdk, safe]
+	// );
 	// console.log(SF);
 	useEffect(() => {
 		async function initSf() {
 			console.log("init sf");
 			const sf = new SuperfluidSDK.Framework({
-				ethers: web3Provider2,
+				web3: new Web3(window.ethereum),
 			});
 			await sf.initialize().then(() => setSF(sf));
 		}
 
-		if (triedToConnectToSafe) {
-			// fallback to other providers
-			if (SF === undefined) initSf();
-			console.log("fallback");
-		}
-	}, [triedToConnectToSafe, SF]);
+		// if (triedToConnectToSafe) {
+		// fallback to other providers
+		if (SF === undefined) initSf();
+		// 	console.log("fallback");
+		// }
+	}, [SF]);
 
 	const onError = (err: any) => {
 		console.error(err);
@@ -67,11 +67,9 @@ function App() {
 	};
 
 	const activateWeb3 = () => {
-		web3React
-			.activate(safeMultisigConnector, onError, true)
-			.catch((err: any) => {
-				console.error(err);
-			});
+		web3React.activate(injected, onError, true).catch((err: any) => {
+			console.error(err);
+		});
 	};
 
 	function handleChainChanged(chainId: number) {
