@@ -5,7 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
-
+import SafeProvider from "@gnosis.pm/safe-apps-react-sdk";
 function getLibrary(provider: any, connector: any) {
 	// return new ethers.providers.Web3Provider(window.ethereum);
 	const test = new Web3Provider(provider);
@@ -16,7 +16,9 @@ function getLibrary(provider: any, connector: any) {
 ReactDOM.render(
 	<React.StrictMode>
 		<Web3ReactProvider getLibrary={getLibrary}>
-			<App />
+			<SafeProvider>
+				<App />
+			</SafeProvider>
 		</Web3ReactProvider>
 	</React.StrictMode>,
 	document.getElementById("root")

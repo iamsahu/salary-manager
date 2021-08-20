@@ -1,6 +1,9 @@
 {
-  "short_name": "React App",
+  "short_name": "SalaryManager",
   "name": "Create React App Sample",
+  "description": "SalaryManager",
+  "iconPath": "logo192.png",
+  
   "icons": [
     {
       "src": "favicon.ico",

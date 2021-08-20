@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./App.css";
 import { Layout, Button, Tag, Menu, Space } from "antd";
 import { useWeb3React } from "@web3-react/core";
@@ -7,7 +7,10 @@ import { SFProvider } from "./helpers/sfcontext";
 import { StateProvider } from "./helpers/statecontext";
 import Web3 from "web3";
 import SuperfluidSDK from "@superfluid-finance/js-sdk";
-
+import { ethers } from "ethers";
+import { useSafeAppsSDK } from "@gnosis.pm/safe-apps-react-sdk";
+import { SafeAppProvider } from "@gnosis.pm/safe-apps-provider";
+import { Web3Provider } from "@ethersproject/providers";
 // import {
 // 	AreaChartOutlined,
 // 	DatabaseOutlined,
@@ -28,6 +31,9 @@ function App() {
 		blackPool: false,
 		rektPool: false,
 	});
+	const { sdk, safe } = useSafeAppsSDK();
+	var wp = new Web3Provider(new SafeAppProvider(safe, sdk));
+	const web3Provider = useMemo(() => wp, [sdk, safe]);
 	// console.log(SF);
 	useEffect(() => {
 		async function initSf() {
