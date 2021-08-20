@@ -138,9 +138,9 @@ function VerticalSalary(params: any) {
 		return <div>Connect Wallet</div>;
 	}
 
-	if (web3React.account !== accountAddress(params.vertical)) {
-		return <div>Please connect the {params.vertical} account</div>;
-	}
+	// if (web3React.account !== accountAddress(params.vertical)) {
+	// 	return <div>Please connect the {params.vertical} account</div>;
+	// }
 
 	// if (indexData === undefined && state[params.vertical] === false) {
 	// 	return (
