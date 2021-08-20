@@ -47,9 +47,10 @@ function App() {
 			});
 			await sf.initialize().then(() => setSF(sf));
 		}
-		if (SF === undefined) initSf();
+
 		if (triedToConnectToSafe) {
 			// fallback to other providers
+			if (SF === undefined) initSf();
 			console.log("fallback");
 		}
 	}, [triedToConnectToSafe, SF]);

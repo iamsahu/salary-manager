@@ -188,6 +188,7 @@ function VerticalSalary(params: any) {
 				),
 			]);
 			// console.log(temp);
+			console.log("Address: " + web3React.account);
 			await sf.host
 				.batchCall(temp, { from: web3React.account })
 				.then((response: any) => {
