@@ -7,7 +7,7 @@ import { SFProvider } from "./helpers/sfcontext";
 import { StateProvider } from "./helpers/statecontext";
 import Web3 from "web3";
 import SuperfluidSDK from "@superfluid-finance/js-sdk";
-
+import { ethers } from "ethers";
 import {
 	useSafeAppConnection,
 	SafeAppConnector,
@@ -40,14 +40,16 @@ function App() {
 
 	const triedToConnectToSafe = useSafeAppConnection(safeMultisigConnector);
 	const { sdk, safe } = useSafeAppsSDK();
-
+	const web3Provider2 = useMemo(
+		() => new Web3Provider(new SafeAppProvider(safe, sdk)),
+		[sdk, safe]
+	);
 	// console.log(SF);
 	useEffect(() => {
 		async function initSf() {
 			console.log("init sf");
-
 			const sf = new SuperfluidSDK.Framework({
-				web3: new Web3Provider(new SafeAppProvider(safe, sdk)),
+				ethers: web3Provider2,
 			});
 			await sf.initialize().then(() => setSF(sf));
 		}
