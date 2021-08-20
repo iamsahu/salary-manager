@@ -22,7 +22,9 @@ import {
 import DataDisplay from "./components/DataDisplay";
 import Framework from "@superfluid-finance/js-sdk/src/Framework";
 import Title from "antd/lib/typography/Title";
-
+import { useSafeAppsSDK } from "@gnosis.pm/safe-apps-react-sdk";
+import { SafeAppProvider } from "@gnosis.pm/safe-apps-provider";
+import { Web3Provider } from "@ethersproject/providers";
 const { Header, Content, Footer, Sider } = Layout;
 const safeMultisigConnector = new SafeAppConnector();
 
@@ -37,13 +39,15 @@ function App() {
 	});
 
 	const triedToConnectToSafe = useSafeAppConnection(safeMultisigConnector);
+	const { sdk, safe } = useSafeAppsSDK();
 
 	// console.log(SF);
 	useEffect(() => {
 		async function initSf() {
 			console.log("init sf");
+
 			const sf = new SuperfluidSDK.Framework({
-				web3: new Web3(window.ethereum),
+				web3: new Web3Provider(new SafeAppProvider(safe, sdk)),
 			});
 			await sf.initialize().then(() => setSF(sf));
 		}

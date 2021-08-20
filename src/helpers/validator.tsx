@@ -10,7 +10,7 @@ ajv.addFormat("address", {
 });
 
 ajv.addFormat("num", {
-	validate: (x: string) => isFinite(Number(x)),
+	validate: (x: string) => isFinite(Number(x)) && x !== "0",
 });
 
 export interface Payouts {
