@@ -272,7 +272,7 @@ function VerticalSalary(params: any) {
 				// console.log(params.data[_indexCSV][salaryToCheck(params.vertical)]);
 				// console.log(_indexData["subscribers"][_index]["units"]);
 				if (
-					params.data[_indexCSV][salaryToCheck(params.vertical)] !==
+					params.data[_indexCSV][salaryToCheck(params.vertical)].trim() !==
 					_indexData["subscribers"][_index]["units"]
 				) {
 					users.push({
@@ -417,8 +417,9 @@ function VerticalSalary(params: any) {
 		setLoadingState(true);
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
-			payment += Number(element[salaryToCheck(params.vertical)]);
+			payment += Number(element[salaryToCheck(params.vertical)].trim());
 		}
+
 		// console.log(payment);
 		// console.log(web3.utils.toWei(payment.toString(), "ether"));
 		// const bob = sf.user({
@@ -440,6 +441,10 @@ function VerticalSalary(params: any) {
 		// 		console.log(error);
 		// 		setLoadingState(false);
 		// 	});
+		console.log(
+			"Payment: " +
+				web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether"))
+		);
 		await sf.ida
 			.distribute({
 				superToken: superTokenAddress(params.vertical),
