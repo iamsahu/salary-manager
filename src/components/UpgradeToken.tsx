@@ -23,7 +23,7 @@ function UpgradeToken(params: any) {
 	const [form] = Form.useForm();
 	const [upgrade, setUpgrade] = useState(false);
 	const [upgradeValue, setUpgradeValue] = useState(0);
-
+	const [upgradeLoading, setUpgradeLoading] = useState(false);
 	const openNotification = () => {
 		notification["success"]({
 			message: "Success!",
@@ -119,10 +119,10 @@ function UpgradeToken(params: any) {
 					)
 					.then(async (response: any) => {
 						// console.log(response);
-						// setUpgrade(true);
-						// setConfirmLoading(false);
-						UpgradeToken();
-						// setVisible(false);
+						setUpgrade(true);
+						setConfirmLoading(false);
+						// UpgradeToken();
+						setVisible(false);
 						// await contractx
 						// 	.upgrade(Web3.utils.toWei(values.Amount))
 						// 	.then((response: any) => {
@@ -158,22 +158,25 @@ function UpgradeToken(params: any) {
 				// 	.catch((error: any) => {
 				// 		console.log(error);
 				// 	});
-
-				await contractx
-					.upgrade(Web3.utils.toWei(upgradeValue.toString()))
-					.then((response: any) => {
-						console.log(response);
-						setConfirmLoading(false);
-						setVisible(false);
-						setUpgrade(false);
-						openNotification();
-					})
-					.catch((error: any) => {
-						console.log(error);
-						setConfirmLoading(false);
-						setVisible(false);
-						openFailNotification();
-					});
+				setUpgradeLoading(true);
+			await contractx
+				.upgrade(Web3.utils.toWei(upgradeValue.toString()))
+				.then((response: any) => {
+					console.log(response);
+					setConfirmLoading(false);
+					setVisible(false);
+					setUpgrade(false);
+					setUpgradeLoading(false);
+					openNotification();
+				})
+				.catch((error: any) => {
+					console.log(error);
+					setConfirmLoading(false);
+					setVisible(false);
+					setUpgrade(false);
+					setUpgradeLoading(false);
+					openFailNotification();
+				});
 		}
 		setConfirmLoading(false);
 		setVisible(false);
@@ -198,9 +201,19 @@ function UpgradeToken(params: any) {
 	return (
 		<>
 			<Space direction="vertical">
-				<Button type="primary" onClick={showModal}>
-					Upgrade {TokenName(params.vertical)}
-				</Button>
+				{upgrade ? (
+					<Button
+						type="primary"
+						onClick={UpgradeToken}
+						loading={upgradeLoading}
+					>
+						Upgrade {TokenName(params.vertical)}
+					</Button>
+				) : (
+					<Button type="primary" onClick={showModal}>
+						Approve {TokenName(params.vertical)}
+					</Button>
+				)}
 				Your {TokenName(params.vertical)}x token balance: {tokBalance}
 			</Space>
 			<Modal

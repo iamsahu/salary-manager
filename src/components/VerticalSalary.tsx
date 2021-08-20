@@ -272,7 +272,7 @@ function VerticalSalary(params: any) {
 				// console.log(params.data[_indexCSV][salaryToCheck(params.vertical)]);
 				// console.log(_indexData["subscribers"][_index]["units"]);
 				if (
-					params.data[_indexCSV][salaryToCheck(params.vertical)].trim() !==
+					params.data[_indexCSV][salaryToCheck(params.vertical)] !==
 					_indexData["subscribers"][_index]["units"]
 				) {
 					users.push({
@@ -445,11 +445,12 @@ function VerticalSalary(params: any) {
 			"Payment: " +
 				web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether"))
 		);
+		var payVal = web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether"));
 		await sf.ida
 			.distribute({
 				superToken: superTokenAddress(params.vertical),
 				indexId: poolID(params.vertical),
-				amount: web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether")), // amount to distribute
+				amount: payVal, // amount to distribute
 				publisher: web3React.account, // the Publisher
 			})
 			.then((response: any) => {
