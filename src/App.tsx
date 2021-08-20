@@ -9,8 +9,13 @@ import Web3 from "web3";
 import SuperfluidSDK from "@superfluid-finance/js-sdk";
 import { ethers } from "ethers";
 import { useSafeAppsSDK } from "@gnosis.pm/safe-apps-react-sdk";
+import {
+	useSafeAppConnection,
+	SafeAppConnector,
+} from "@gnosis.pm/safe-apps-web3-react";
 import { SafeAppProvider } from "@gnosis.pm/safe-apps-provider";
 import { Web3Provider } from "@ethersproject/providers";
+
 // import {
 // 	AreaChartOutlined,
 // 	DatabaseOutlined,
@@ -22,6 +27,8 @@ import Framework from "@superfluid-finance/js-sdk/src/Framework";
 import Title from "antd/lib/typography/Title";
 
 const { Header, Content, Footer, Sider } = Layout;
+const safeMultisigConnector = new SafeAppConnector();
+
 declare let window: any;
 function App() {
 	const web3React = useWeb3React();
@@ -34,6 +41,8 @@ function App() {
 	const { sdk, safe } = useSafeAppsSDK();
 	var wp = new Web3Provider(new SafeAppProvider(safe, sdk));
 	const web3Provider = useMemo(() => wp, [sdk, safe]);
+	const triedToConnectToSafe = useSafeAppConnection(safeMultisigConnector);
+
 	// console.log(SF);
 	useEffect(() => {
 		async function initSf() {
@@ -44,7 +53,11 @@ function App() {
 			await sf.initialize().then(() => setSF(sf));
 		}
 		if (SF === undefined) initSf();
-	}, []);
+		if (triedToConnectToSafe) {
+			// fallback to other providers
+			console.log("fallback");
+		}
+	}, [triedToConnectToSafe, SF]);
 
 	const onError = (err: any) => {
 		console.error(err);
@@ -52,9 +65,11 @@ function App() {
 	};
 
 	const activateWeb3 = () => {
-		web3React.activate(injected, onError, true).catch((err: any) => {
-			console.error(err);
-		});
+		web3React
+			.activate(safeMultisigConnector, onError, true)
+			.catch((err: any) => {
+				console.error(err);
+			});
 	};
 
 	function handleChainChanged(chainId: number) {
