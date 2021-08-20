@@ -1,8 +1,8 @@
 {
   "short_name": "SalaryManager",
-  "name": "Create React App Sample",
+  "name": "StakeDAO salary manager app",
   "description": "SalaryManager",
-  "iconPath": "logo192.png",
+  "iconPath": "logo.png",
   
   "icons": [
     {
@@ -11,7 +11,7 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
