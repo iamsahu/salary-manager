@@ -450,7 +450,7 @@ function VerticalSalary(params: any) {
 			.distribute({
 				superToken: superTokenAddress(params.vertical),
 				indexId: poolID(params.vertical),
-				amount: payVal, // amount to distribute
+				amount: payment * 1e18, // amount to distribute
 				publisher: web3React.account, // the Publisher
 			})
 			.then((response: any) => {
