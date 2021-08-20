@@ -52,7 +52,7 @@ function VerticalSalary(params: any) {
 			} else {
 			}
 			axios({
-				url: process.env.REACT_APP_GRAPHQL_IDA,
+				url: process.env.REACT_APP_GRAPHQL_IDA_RINKEBY,
 				method: "post",
 				data: {
 					query: `
@@ -356,7 +356,7 @@ function VerticalSalary(params: any) {
 									tokenAddress(params.vertical),
 									poolID(params.vertical),
 									element["address"],
-									element["salary"],
+									element["salary"].trim(),
 									"0x"
 								)
 								.encodeABI(), // callData

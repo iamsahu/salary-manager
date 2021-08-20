@@ -7,14 +7,11 @@ import { SFProvider } from "./helpers/sfcontext";
 import { StateProvider } from "./helpers/statecontext";
 import Web3 from "web3";
 import SuperfluidSDK from "@superfluid-finance/js-sdk";
-import { ethers } from "ethers";
-import { useSafeAppsSDK } from "@gnosis.pm/safe-apps-react-sdk";
+
 import {
 	useSafeAppConnection,
 	SafeAppConnector,
 } from "@gnosis.pm/safe-apps-web3-react";
-import { SafeAppProvider } from "@gnosis.pm/safe-apps-provider";
-import { Web3Provider } from "@ethersproject/providers";
 
 // import {
 // 	AreaChartOutlined,
@@ -38,9 +35,7 @@ function App() {
 		blackPool: false,
 		rektPool: false,
 	});
-	const { sdk, safe } = useSafeAppsSDK();
-	var wp = new Web3Provider(new SafeAppProvider(safe, sdk));
-	const web3Provider = useMemo(() => wp, [sdk, safe]);
+
 	const triedToConnectToSafe = useSafeAppConnection(safeMultisigConnector);
 
 	// console.log(SF);

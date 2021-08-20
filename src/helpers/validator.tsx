@@ -6,11 +6,11 @@ const ajv = new Ajv();
 addFormats(ajv);
 
 ajv.addFormat("address", {
-	validate: (x: string) => Web3.utils.isAddress(x) || x === "" || x === "0x",
+	validate: (x: string) => Web3.utils.isAddress(x),
 });
 
 ajv.addFormat("num", {
-	validate: (x: string) => isFinite(Number(x)) || x === "" || x === "0",
+	validate: (x: string) => isFinite(Number(x)),
 });
 
 export interface Payouts {
