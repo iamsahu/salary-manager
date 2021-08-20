@@ -154,7 +154,7 @@ function VerticalSalary(params: any) {
 		if (sf === null) return;
 
 		// if (indexData === undefined) {
-		// 	return;
+		// 	return
 		// }
 
 		setLoadingState(true);
@@ -190,7 +190,7 @@ function VerticalSalary(params: any) {
 			// console.log(temp);
 			console.log("Address: " + web3React.account);
 			await sf.host
-				.batchCall(temp, { from: web3React.account })
+				.batchCall(temp)
 				.then((response: any) => {
 					console.log(response);
 					// setVisible(false);
@@ -216,7 +216,7 @@ function VerticalSalary(params: any) {
 			let temp: any[] = BatchCallForAddingUsers(usersNot);
 			var web3 = new Web3(window.ethereum);
 			await sf.host
-				.batchCall(temp, { from: web3React.account })
+				.batchCall(temp)
 				.then((response: any) => {
 					console.log(response);
 					setLoadingState(false);
