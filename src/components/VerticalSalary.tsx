@@ -110,6 +110,12 @@ function VerticalSalary(params: any) {
 						}
 						setcsvData(temp);
 					} else {
+						for (let index = 0; index < params.data.length; index++) {
+							let element = params.data[index];
+							element["state"] = "good";
+							temp.push(element);
+						}
+						setcsvData(temp);
 						setProgress("disburseReady");
 					}
 				} else {
@@ -237,7 +243,8 @@ function VerticalSalary(params: any) {
 		let mod: number = 0;
 
 		let activeSubscribers = _indexData["activeSubscribers"];
-
+		console.log(params.data);
+		console.log(salaryToCheck(params.vertical));
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
 			if (
@@ -275,6 +282,14 @@ function VerticalSalary(params: any) {
 					params.data[_indexCSV][salaryToCheck(params.vertical)] !==
 					_indexData["subscribers"][_index]["units"]
 				) {
+					// console.log(
+					// 	"CSV " +
+					// 		params.data[_indexCSV][salaryToCheck(params.vertical)] +
+					// 		" $"
+					// );
+					// console.log(
+					// 	"Index " + _indexData["subscribers"][_index]["units"] + " $"
+					// );
 					users.push({
 						address: element[addressToCheck(params.vertical)],
 						salary: params.data[_indexCSV][salaryToCheck(params.vertical)],

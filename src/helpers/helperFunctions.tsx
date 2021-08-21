@@ -36,7 +36,7 @@ export function accountAddress(vertical: String): any {
 
 export function tokenAddress(vertical: String): any {
 	switch (vertical) {
-		case "stakePool":
+		case "stakePool"
 			return process.env.REACT_APP_SDT;
 		case "stakePoolLP":
 			return process.env.REACT_APP_SDAM3CRV;
