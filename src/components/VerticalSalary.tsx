@@ -53,7 +53,7 @@ function VerticalSalary(params: any) {
 			} else {
 			}
 			axios({
-				url: process.env.REACT_APP_GRAPHQL_IDA_RINKEBY,
+				url: process.env.REACT_APP_GRAPHQL_IDA,
 				method: "post",
 				data: {
 					query: `
