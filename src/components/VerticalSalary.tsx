@@ -417,21 +417,45 @@ function VerticalSalary(params: any) {
 		setLoadingState(true);
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
-			payment += Number(element[salaryToCheck(params.vertical)]);
+			payment += Number(element[salaryToCheck(params.vertical)].trim());
 		}
+
 		// console.log(payment);
 		// console.log(web3.utils.toWei(payment.toString(), "ether"));
-		const bob = sf.user({
-			address: web3React.account,
-			token: superTokenAddress(params.vertical),
-		});
-		await bob
-			.distributeToPool({
-				poolId: poolID(params.vertical),
-				amount: web3.utils.toWei(payment.toString(), "ether"),
+		// const bob = sf.user({
+		// 	address: web3React.account,
+		// 	token: superTokenAddress(params.vertical),
+		// });
+		// await bob
+		// 	.distributeToPool({
+		// 		poolId: poolID(params.vertical),
+		// 		amount: payment * 1e18,
+		// 	})
+		// 	.then((response: any) => {
+		// 		// console.log(response);
+		// 		setProgress("completed");
+		// 		setLoadingState(false);
+		// 		openNotification("Amount disbursed!");
+		// 	})
+		// 	.catch((error: any) => {
+		// 		console.log(error);
+		// 		setLoadingState(false);
+		// 	});
+		// console.log("Payyy " + payment * 1e18);
+		// console.log(
+		// 	"Payment: " +
+		// 		web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether"))
+		// );
+		var payVal = web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether"));
+		await sf.ida
+			.distribute({
+				superToken: superTokenAddress(params.vertical),
+				indexId: poolID(params.vertical),
+				amount: payVal.toString(), // amount to distribute
+				publisher: web3React.account, // the Publisher
 			})
 			.then((response: any) => {
-				// console.log(response);
+				console.log(response);
 				setProgress("completed");
 				setLoadingState(false);
 				openNotification("Amount disbursed!");
@@ -440,20 +464,6 @@ function VerticalSalary(params: any) {
 				console.log(error);
 				setLoadingState(false);
 			});
-		// await sf.ida
-		// 	.distribute({
-		// 		superToken: tokenAddress(params.vertical),
-		// 		indexId: poolID("stalePool"),
-		// 		amount: web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether")), // amount to distribute
-		// 		publisher: web3React.account, // the Publisher
-		// 	})
-		// 	.then((response: any) => {
-		// 		console.log(response);
-		// 		setProgress("completed");
-		// 	})
-		// 	.catch((error: any) => {
-		// 		console.log(error);
-		// 	});
 	}
 
 	return (

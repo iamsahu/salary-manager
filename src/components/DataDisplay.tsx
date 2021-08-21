@@ -13,7 +13,7 @@ function DataDisplay(params: any) {
 	const [data, setdata] = useState<Array<any> | null>(null);
 
 	function handleForce(params: any) {
-		console.log(params);
+		// console.log(params);
 		let obj2: Payouts[] = [];
 		let obj: Payouts[] = params;
 		for (let index = 0; index < obj.length; index++) {
@@ -21,8 +21,8 @@ function DataDisplay(params: any) {
 			if (validate(element)) {
 				obj2.push(element);
 			} else {
-				console.log("hello");
-				console.log(validate.errors);
+				// console.log("hello");
+				// console.log(validate.errors);
 			}
 		}
 		setdata(obj2);

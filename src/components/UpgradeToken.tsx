@@ -21,7 +21,9 @@ function UpgradeToken(params: any) {
 	const [confirmLoading, setConfirmLoading] = useState(false);
 	const [tokBalance, setTokBalance] = useState("0");
 	const [form] = Form.useForm();
-
+	const [upgrade, setUpgrade] = useState(false);
+	const [upgradeValue, setUpgradeValue] = useState(0);
+	const [upgradeLoading, setUpgradeLoading] = useState(false);
 	const openNotification = () => {
 		notification["success"]({
 			message: "Success!",
@@ -44,6 +46,7 @@ function UpgradeToken(params: any) {
 	};
 
 	const showModal = () => {
+		setUpgradeValue(0);
 		setVisible(true);
 	};
 
@@ -60,7 +63,8 @@ function UpgradeToken(params: any) {
 	const onFinish = async (values: any) => {
 		console.log("Success:", values);
 		//TO DO: Add function to fire a query to handle addition of subscriber data.
-		await UpgradeToken(values);
+		setUpgradeValue(values.Amount);
+		await ApproveToken(values);
 		// setVisible(false);
 		// setConfirmLoading(false);
 	};
@@ -69,6 +73,11 @@ function UpgradeToken(params: any) {
 	let contractx = new Contract(
 		sT, //Super Token Address
 		SuperToken.abi,
+		web3React.library.getSigner()
+	);
+	const contract = new Contract(
+		bT, //Base Token Address
+		ERC20.abi,
 		web3React.library.getSigner()
 	);
 
@@ -93,13 +102,7 @@ function UpgradeToken(params: any) {
 	// const tokenInst = new web3.eth.Contract(tokenABI, token.address);
 	// const balance = await tokenInst.methods.balanceOf(address).call();
 
-	async function UpgradeToken(values: any) {
-		const contract = new Contract(
-			bT, //Base Token Address
-			ERC20.abi,
-			web3React.library.getSigner()
-		);
-
+	async function ApproveToken(values: any) {
 		if (values.Amount > 0) {
 			// console.log(values);
 			if (typeof contractx !== undefined && typeof contract !== undefined)
@@ -116,26 +119,64 @@ function UpgradeToken(params: any) {
 					)
 					.then(async (response: any) => {
 						// console.log(response);
-						await contractx
-							.upgrade(Web3.utils.toWei(values.Amount))
-							.then((response: any) => {
-								console.log(response);
-								setConfirmLoading(false);
-								setVisible(false);
-								openNotification();
-							})
-							.catch((error: any) => {
-								console.log(error);
-								setConfirmLoading(false);
-								setVisible(false);
-								openFailNotification();
-							});
+						setUpgrade(true);
+						setConfirmLoading(false);
+						// UpgradeToken();
+						setVisible(false);
+						// await contractx
+						// 	.upgrade(Web3.utils.toWei(values.Amount))
+						// 	.then((response: any) => {
+						// 		console.log(response);
+						// 		setConfirmLoading(false);
+						// 		setVisible(false);
+						// 		openNotification();
+						// 	})
+						// 	.catch((error: any) => {
+						// 		console.log(error);
+						// 		setConfirmLoading(false);
+						// 		setVisible(false);
+						// 		openFailNotification();
+						// 	});
 					})
 					.catch((error: any) => {
 						console.log(error);
 						setConfirmLoading(false);
 						setVisible(false);
 					});
+		}
+		setConfirmLoading(false);
+		setVisible(false);
+	}
+
+	async function UpgradeToken() {
+		if (upgradeValue > 0) {
+			// console.log(values);
+			if (typeof contractx !== undefined && typeof contract !== undefined)
+				// var tp = await contract
+				// 	.allowance(web3React.account, sT)
+				// 	.then((response: any) => console.log(response))
+				// 	.catch((error: any) => {
+				// 		console.log(error);
+				// 	});
+				setUpgradeLoading(true);
+			await contractx
+				.upgrade(Web3.utils.toWei(upgradeValue.toString()))
+				.then((response: any) => {
+					console.log(response);
+					setConfirmLoading(false);
+					setVisible(false);
+					setUpgrade(false);
+					setUpgradeLoading(false);
+					openNotification();
+				})
+				.catch((error: any) => {
+					console.log(error);
+					setConfirmLoading(false);
+					setVisible(false);
+					setUpgrade(false);
+					setUpgradeLoading(false);
+					openFailNotification();
+				});
 		}
 		setConfirmLoading(false);
 		setVisible(false);
@@ -160,9 +201,19 @@ function UpgradeToken(params: any) {
 	return (
 		<>
 			<Space direction="vertical">
-				<Button type="primary" onClick={showModal}>
-					Upgrade {TokenName(params.vertical)}
-				</Button>
+				{upgrade ? (
+					<Button
+						type="primary"
+						onClick={UpgradeToken}
+						loading={upgradeLoading}
+					>
+						Upgrade {TokenName(params.vertical)}
+					</Button>
+				) : (
+					<Button type="primary" onClick={showModal}>
+						Approve {TokenName(params.vertical)}
+					</Button>
+				)}
 				Your {TokenName(params.vertical)}x token balance: {tokBalance}
 			</Space>
 			<Modal
