@@ -429,7 +429,7 @@ function VerticalSalary(params: any) {
 		// await bob
 		// 	.distributeToPool({
 		// 		poolId: poolID(params.vertical),
-		// 		amount: web3.utils.toWei(payment.toString(), "ether"),
+		// 		amount: payment * 1e18,
 		// 	})
 		// 	.then((response: any) => {
 		// 		// console.log(response);
@@ -441,16 +441,17 @@ function VerticalSalary(params: any) {
 		// 		console.log(error);
 		// 		setLoadingState(false);
 		// 	});
-		console.log(
-			"Payment: " +
-				web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether"))
-		);
+		// console.log("Payyy " + payment * 1e18);
+		// console.log(
+		// 	"Payment: " +
+		// 		web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether"))
+		// );
 		var payVal = web3.utils.toBN(web3.utils.toWei(payment.toString(), "ether"));
 		await sf.ida
 			.distribute({
 				superToken: superTokenAddress(params.vertical),
 				indexId: poolID(params.vertical),
-				amount: payment * 1e18, // amount to distribute
+				amount: payVal.toString(), // amount to distribute
 				publisher: web3React.account, // the Publisher
 			})
 			.then((response: any) => {
