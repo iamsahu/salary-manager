@@ -115,7 +115,7 @@ function UpgradeToken(params: any) {
 				await contract
 					.approve(
 						sT, //Super Token Address
-						Web3.utils.toWei((Number(values.Amount) + 1).toString())
+						Web3.utils.toWei((Number(values.Amount)).toString())
 					)
 					.then(async (response: any) => {
 						// console.log(response);
