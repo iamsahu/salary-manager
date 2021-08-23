@@ -529,13 +529,20 @@ function VerticalSalary(params: any) {
 								Disburse Amount
 							</Button>
 							<br />
-							{AmountToBePaid()}
 						</Space>
 					) : (
 						<Button onClick={ReleaseThePayment} disabled>
 							Disburse Amount
 						</Button>
 					)}
+					<Button
+						onClick={ReleaseThePayment}
+						type="primary"
+						loading={loadingState}
+					>
+						Emergency Disburse Amount
+					</Button>
+					{AmountToBePaid()}
 				</Space>
 				<Table<Payouts> dataSource={params.data}>
 					{/* <Column title="Name" dataIndex="name" key="name" /> */}
