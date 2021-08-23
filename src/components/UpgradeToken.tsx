@@ -24,6 +24,16 @@ function UpgradeToken(params: any) {
 	const [upgrade, setUpgrade] = useState(false);
 	const [upgradeValue, setUpgradeValue] = useState(0);
 	const [upgradeLoading, setUpgradeLoading] = useState(false);
+	const openApprovalNotification = () => {
+		notification["success"]({
+			message: "Success!",
+			description: "Token approval successful!",
+			duration: 2.5,
+			onClick: () => {
+				console.log("Notification Clicked!");
+			},
+		});
+	};
 	const openNotification = () => {
 		notification["success"]({
 			message: "Success!",
@@ -115,7 +125,7 @@ function UpgradeToken(params: any) {
 				await contract
 					.approve(
 						sT, //Super Token Address
-						Web3.utils.toWei((Number(values.Amount) + 1).toString())
+						Web3.utils.toWei(Number(values.Amount).toString())
 					)
 					.then(async (response: any) => {
 						// console.log(response);
@@ -123,6 +133,7 @@ function UpgradeToken(params: any) {
 						setConfirmLoading(false);
 						// UpgradeToken();
 						setVisible(false);
+						openApprovalNotification();
 						// await contractx
 						// 	.upgrade(Web3.utils.toWei(values.Amount))
 						// 	.then((response: any) => {
