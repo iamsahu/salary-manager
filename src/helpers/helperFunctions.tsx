@@ -37,15 +37,15 @@ export function accountAddress(vertical: String): any {
 export function tokenAddress(vertical: String): any {
 	switch (vertical) {
 		case "stakePool":
-			return process.env.REACT_APP_RINKEBY_BASE_USDC;
+			return process.env.REACT_APP_SDT;
 		case "stakePoolLP":
-			return process.env.REACT_APP_RINKEBY_BASE_USDT;
+			return process.env.REACT_APP_SDAM3CRV;
 		case "blackPool":
-			return process.env.REACT_APP_RINKEBY_BASE_DAI;
+			return process.env.REACT_APP_BPT;
 		case "blackPoolLP":
-			return process.env.REACT_APP_RINKEBY_BASE_ETH;
+			return process.env.REACT_APP_SDAM3CRV;
 		case "rektPool":
-			return process.env.REACT_APP_RINKEBY_BASE;
+			return process.env.REACT_APP_REKTT;
 
 		default:
 			return "";
@@ -55,15 +55,15 @@ export function tokenAddress(vertical: String): any {
 export function superTokenAddress(vertical: String): any {
 	switch (vertical) {
 		case "stakePool":
-			return process.env.REACT_APP_RINKEBY_SUPER_USDC;
+			return process.env.REACT_APP_SDTX;
 		case "stakePoolLP":
-			return process.env.REACT_APP_RINKEBY_SUPER_USDT;
+			return process.env.REACT_APP_SDAM3CRVX;
 		case "blackPool":
-			return process.env.REACT_APP_RINKEBY_SUPER_DAI;
+			return process.env.REACT_APP_BPTX;
 		case "blackPoolLP":
-			return process.env.REACT_APP_RINKEBY_SUPER_ETH;
+			return process.env.REACT_APP_SDAM3CRVX;
 		case "rektPool":
-			return process.env.REACT_APP_RINKEBY_SUPER;
+			return process.env.REACT_APP_REKTT;
 
 		default:
 			return "";

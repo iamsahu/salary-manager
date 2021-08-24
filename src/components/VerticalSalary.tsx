@@ -393,7 +393,7 @@ function VerticalSalary(params: any) {
 
 	function AmountToBePaid(): any {
 		let payment: number = 0;
-
+		if (params.data === null) return <></>;
 		for (let index = 0; index < params.data.length; index++) {
 			const element = params.data[index];
 			payment += Number(element[salaryToCheck(params.vertical)]);
@@ -529,13 +529,20 @@ function VerticalSalary(params: any) {
 								Disburse Amount
 							</Button>
 							<br />
-							{AmountToBePaid()}
 						</Space>
 					) : (
 						<Button onClick={ReleaseThePayment} disabled>
 							Disburse Amount
 						</Button>
 					)}
+					<Button
+						onClick={ReleaseThePayment}
+						type="primary"
+						loading={loadingState}
+					>
+						Emergency Disburse Amount
+					</Button>
+					{AmountToBePaid()}
 				</Space>
 				<Table<Payouts> dataSource={params.data}>
 					{/* <Column title="Name" dataIndex="name" key="name" /> */}

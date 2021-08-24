@@ -44,6 +44,16 @@ function UpgradeToken(params: any) {
 			},
 		});
 	};
+	const openApprovalNotification = () => {
+		notification["success"]({
+			message: "Success!",
+			description: "Token approval successful!",
+			duration: 2.5,
+			onClick: () => {
+				console.log("Notification Clicked!");
+			},
+		});
+	};
 	const openFailNotification = () => {
 		notification["error"]({
 			message: "Fail!",
@@ -134,20 +144,7 @@ function UpgradeToken(params: any) {
 						// UpgradeToken();
 						setVisible(false);
 						openApprovalNotification();
-						// await contractx
-						// 	.upgrade(Web3.utils.toWei(values.Amount))
-						// 	.then((response: any) => {
-						// 		console.log(response);
-						// 		setConfirmLoading(false);
-						// 		setVisible(false);
-						// 		openNotification();
-						// 	})
-						// 	.catch((error: any) => {
-						// 		console.log(error);
-						// 		setConfirmLoading(false);
-						// 		setVisible(false);
-						// 		openFailNotification();
-						// 	});
+
 					})
 					.catch((error: any) => {
 						console.log(error);
