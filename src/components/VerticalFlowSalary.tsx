@@ -130,13 +130,14 @@ function VerticalFlowSalary(params: any) {
 							temp.push(element);
 						}
 						setcsvData(temp);
-						setProgress("disburseReady");
+						// setProgress("disburseReady");
 					}
 				} else {
 					let temp: any[] = [];
 					for (let index = 0; index < params.data.length; index++) {
 						let element = params.data[index];
-						element["state"] = "new";
+						if (element[salaryToCheck(params.vertical)].toString() !== "0")
+							element["state"] = "new";
 						temp.push(element);
 					}
 					setcsvData(temp);
