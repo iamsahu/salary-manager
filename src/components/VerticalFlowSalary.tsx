@@ -47,7 +47,7 @@ function VerticalFlowSalary(params: any) {
 	useEffect(() => {
 		async function GetData() {
 			//Write code here to get the data
-			console.log(web3React.account);
+			// console.log(web3React.account);
 			if (params.data === null) {
 				return;
 			} else {
@@ -130,22 +130,32 @@ function VerticalFlowSalary(params: any) {
 							temp.push(element);
 						}
 						setcsvData(temp);
-// 						setProgress("disburseReady");
+						// 						setProgress("disburseReady");
 					}
 				} else {
 					let temp: any[] = [];
+					let cnt: number = 0;
 					for (let index = 0; index < params.data.length; index++) {
-
 						let element = params.data[index];
-						if (element[salaryToCheck(params.vertical)].toString() === "0") {
-						element["state"] = "nope";
+
+						// console.log(element);
+						// console.log(salaryToCheck(params.vertical));
+						// console.log(
+						// 	element[salaryToCheck(params.vertical)].toString().trim()
+						// );
+						if (element[salaryToCheck(params.vertical)] !== undefined) {
+							if (element[salaryToCheck(params.vertical)].toString() == "0") {
+								element["state"] = "nope";
+							} else {
+								element["state"] = "new";
+								cnt += 1;
+							}
+							temp.push(element);
 						}
-						temp.push(element);
-						
 					}
 					setcsvData(temp);
 					setProgress("disburseReady");
-					setNewUsers(params.data.length);
+					setNewUsers(cnt);
 				}
 			});
 		}
@@ -389,7 +399,7 @@ function VerticalFlowSalary(params: any) {
 						</Space>
 					) : (
 						<Button onClick={AddUsersToPool} disabled>
-							Modify Pool Members
+							Disburse
 						</Button>
 					)}
 
@@ -456,6 +466,12 @@ function VerticalFlowSalary(params: any) {
 								return (
 									<>
 										<Tag color="red">Delete</Tag>
+									</>
+								);
+							else if (record["state"] === "nope")
+								return (
+									<>
+										<Tag color="red">Won't be added</Tag>
 									</>
 								);
 							else return <></>;
