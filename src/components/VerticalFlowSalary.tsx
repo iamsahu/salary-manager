@@ -53,7 +53,7 @@ function VerticalFlowSalary(params: any) {
 			} else {
 			}
 			axios({
-				url: process.env.REACT_APP_GRAPHQL_CFA_RINKEBY,
+				url: process.env.REACT_APP_GRAPHQL_CFA,
 				method: "post",
 				data: {
 					query: `
