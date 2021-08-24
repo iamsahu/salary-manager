@@ -141,6 +141,7 @@ function VerticalFlowSalary(params: any) {
 					}
 					setcsvData(temp);
 					setProgress("disburseReady");
+					setNewUsers(params.data.length);
 				}
 			});
 		}
