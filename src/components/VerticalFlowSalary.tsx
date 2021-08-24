@@ -102,7 +102,7 @@ function VerticalFlowSalary(params: any) {
 					console.log(usersNot);
 					let temp: any[] = [];
 					if (usersNot.length > 0) {
-						setProgress("modifyPoolMembers");
+						setProgress("disburseReady");
 						for (let index = 0; index < params.data.length; index++) {
 							let element = params.data[index];
 							let ind = usersNot.findIndex(
@@ -140,7 +140,7 @@ function VerticalFlowSalary(params: any) {
 						temp.push(element);
 					}
 					setcsvData(temp);
-					setProgress("createPool");
+					setProgress("disburseReady");
 				}
 			});
 		}
@@ -366,7 +366,7 @@ function VerticalFlowSalary(params: any) {
 							Create Pool
 						</Button>
 					)} */}
-					{progress === "modifyPoolMembers" ? (
+					{progress === "disburseReady" ? (
 						<Space direction="vertical" size="small">
 							<Button
 								onClick={AddUsersToPool}
