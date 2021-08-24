@@ -44,16 +44,7 @@ function UpgradeToken(params: any) {
 			},
 		});
 	};
-	const openApprovalNotification = () => {
-		notification["success"]({
-			message: "Success!",
-			description: "Token approval successful!",
-			duration: 2.5,
-			onClick: () => {
-				console.log("Notification Clicked!");
-			},
-		});
-	};
+	
 	const openFailNotification = () => {
 		notification["error"]({
 			message: "Fail!",
