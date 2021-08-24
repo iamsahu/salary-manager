@@ -24,6 +24,16 @@ function UpgradeToken(params: any) {
 	const [upgrade, setUpgrade] = useState(false);
 	const [upgradeValue, setUpgradeValue] = useState(0);
 	const [upgradeLoading, setUpgradeLoading] = useState(false);
+	const openApprovalNotification = () => {
+		notification["success"]({
+			message: "Success!",
+			description: "Token approval successful!",
+			duration: 2.5,
+			onClick: () => {
+				console.log("Notification Clicked!");
+			},
+		});
+	};
 	const openNotification = () => {
 		notification["success"]({
 			message: "Success!",
@@ -134,6 +144,7 @@ function UpgradeToken(params: any) {
 						// UpgradeToken();
 						setVisible(false);
 						openApprovalNotification();
+
 					})
 					.catch((error: any) => {
 						console.log(error);

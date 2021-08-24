@@ -51,7 +51,25 @@ function App() {
 			const sf = new SuperfluidSDK.Framework({
 				ethers: web3Provider2,
 			});
-			await sf.initialize().then(() => setSF(sf));
+			await sf.initialize().then(async () => {
+				setSF(sf);
+				const bob = sf.user({
+					address: "0x64cea972de53375f9f23cce4eeee1cf8898e8751",
+					token: "0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f",
+				});
+
+				await sf.cfa
+					?.listFlows({
+						superToken: "0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f",
+						account: "0x64cea972de53375f9f23cce4eeee1cf8898e8751",
+						onlyOutFlows: false,
+						onlyInFlows: false,
+					})
+					.then((response) => console.log(response))
+					.catch((error) => console.log(error));
+			});
+			var add: any = web3React.account;
+			console.log(add);
 		}
 
 		if (triedToConnectToSafe) {

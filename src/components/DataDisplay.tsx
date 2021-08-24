@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Tabs } from "antd";
 import CSVReader from "react-csv-reader";
 // import axios from "axios";
-import VerticalSalary from "./VerticalSalary";
+import VerticalFlowSalary from "./VerticalFlowSalary";
 import { Content } from "antd/lib/layout/layout";
 import { Payouts, validate } from "../helpers/validator";
 
@@ -63,16 +63,16 @@ function DataDisplay(params: any) {
 				<br />
 				<Tabs defaultActiveKey="1" onChange={callback}>
 					<TabPane tab="StakeDAO" key="1">
-						<VerticalSalary data={data} vertical={"stakePool"} />
+						<VerticalFlowSalary data={data} vertical={"stakePool"} />
 					</TabPane>
 					<TabPane tab="StakeDAO LP" key="2">
-						<VerticalSalary data={data} vertical={"stakePoolLP"} />
+						<VerticalFlowSalary data={data} vertical={"stakePoolLP"} />
 					</TabPane>
 					<TabPane tab="BlackPool" key="3">
-						<VerticalSalary data={data} vertical={"blackPool"} />
+						<VerticalFlowSalary data={data} vertical={"blackPool"} />
 					</TabPane>
 					<TabPane tab="BlackPool LP" key="4">
-						<VerticalSalary data={data} vertical={"blackPoolLP"} />
+						<VerticalFlowSalary data={data} vertical={"blackPoolLP"} />
 					</TabPane>
 					{/* <TabPane tab="rekt" key="3">
 						Coming soon!
