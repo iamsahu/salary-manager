@@ -135,9 +135,13 @@ function VerticalFlowSalary(params: any) {
 				} else {
 					let temp: any[] = [];
 					for (let index = 0; index < params.data.length; index++) {
+
 						let element = params.data[index];
-						element["state"] = "new";
+						if (element[salaryToCheck(params.vertical)].toString() == "0") {
+						element["state"] = "nope";
+						}
 						temp.push(element);
+						
 					}
 					setcsvData(temp);
 					setProgress("disburseReady");
