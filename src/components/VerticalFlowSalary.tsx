@@ -365,6 +365,17 @@ function VerticalFlowSalary(params: any) {
 		// 	.catch((error: any) => console.log(error));
 	}
 
+	function AmountToBePaid(): any {
+		let payment: number = 0;
+		if (params.data === null) return <></>;
+		for (let index = 0; index < params.data.length; index++) {
+			const element = params.data[index];
+			payment += Number(element[salaryToCheck(params.vertical)]);
+		}
+
+		return <div>Amount to be streamed/month: {payment}</div>;
+	}
+
 	return (
 		<Content
 			style={{ padding: "20px 20px", background: "#fff", minHeight: "80vh" }}
@@ -402,7 +413,7 @@ function VerticalFlowSalary(params: any) {
 							Disburse
 						</Button>
 					)}
-
+					{AmountToBePaid()}
 					{/* {progress === "disburseReady" ? (
 						<Space direction="vertical" size="small">
 							<Button
