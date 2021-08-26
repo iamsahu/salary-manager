@@ -78,7 +78,7 @@ function VerticalFlowSalary(params: any) {
 				if (result.data.data["flows"] === undefined) return;
 				//Based on count determine whether pool needs to be created or not
 				//If pool exists
-				// console.log(result);
+				console.log(result);
 				if (result.data.data["flows"].length > 0) {
 					let parsedData: any[] = [];
 					for (
@@ -133,6 +133,7 @@ function VerticalFlowSalary(params: any) {
 						// setProgress("disburseReady");
 					}
 				} else {
+					console.log("new");
 					let temp: any[] = [];
 					for (let index = 0; index < params.data.length; index++) {
 						let element = params.data[index];
