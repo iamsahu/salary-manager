@@ -198,12 +198,11 @@ function VerticalFlowSalary(params: any) {
 			if (element[salaryToCheck(params.vertical)] == undefined) {
 				continue;
 			}
+			let yearlySalary = element[salaryToCheck(params.vertical)] * 12;
 			let csvFlowRate = Web3.utils.toBN(
-				Web3.utils
-					.toWei(element[salaryToCheck(params.vertical)].toString())
-					.toString()
+				Web3.utils.toWei(yearlySalary.toString()).toString()
 			);
-			csvFlowRate = csvFlowRate.div(Web3.utils.toBN(3600 * 24 * 30));
+			csvFlowRate = csvFlowRate.div(Web3.utils.toBN(3600 * 24 * 365));
 
 			if (indexIndex.toString() === "-1") {
 				//Not found, means no flow so create a new
@@ -258,8 +257,9 @@ function VerticalFlowSalary(params: any) {
 				.then((response: any) => {
 					console.log(response);
 					setLoadingState(false);
-					setProgress("disburseReady");
+
 					openNotification("Flows started successfully!!");
+					setProgress("completed");
 				})
 				.catch((error: any) => {
 					console.log(error);
