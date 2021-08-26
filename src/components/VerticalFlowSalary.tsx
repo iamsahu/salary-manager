@@ -271,7 +271,7 @@ function VerticalFlowSalary(params: any) {
 				.then((response: any) => {
 					console.log(response);
 					setLoadingState(false);
-					setProgress("disburseReady");
+					setProgress("completed");
 					openNotification("Flows started successfully!!");
 				})
 				.catch((error: any) => {
