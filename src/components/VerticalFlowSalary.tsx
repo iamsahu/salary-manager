@@ -23,7 +23,7 @@ declare let window: any;
 function VerticalFlowSalary(params: any) {
 	const web3React = useWeb3React();
 	// console.log(params);
-	const [indexData, setIndexData] = useState<Array<any> | null>();
+	const [indexData, setIndexData] = useState<Array<any> | null>([]);
 	const [poolExists, setPoolExists] = useState(false);
 	const sf = useContext<any>(sfcontext);
 	const [progress, setProgress] = useState("loading");
@@ -258,9 +258,9 @@ function VerticalFlowSalary(params: any) {
 	}
 
 	async function AddUsersToPool() {
-		if (indexData === undefined) {
-			return;
-		}
+		// if (indexData === undefined) {
+		// 	return;
+		// }
 		setLoadingState(true);
 		let usersNot: any[] = FindUsersWithNoStream(indexData);
 		if (usersNot.length > 0) {
