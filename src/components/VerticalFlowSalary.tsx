@@ -31,6 +31,7 @@ function VerticalFlowSalary(params: any) {
 	const [newUsers, setNewUsers] = useState(0);
 	const [modifyUser, setModifyUser] = useState(0);
 	const [removeUser, setRemoveUser] = useState(0);
+	const [removedUsers, setRemovedUsers] = useState("None");
 	const [csvData, setcsvData] = useState<Array<any> | null>([]);
 	var web3 = new Web3(window.ethereum);
 
@@ -99,6 +100,15 @@ function VerticalFlowSalary(params: any) {
 					console.log(parsedData);
 					//Calculate whether new members need to be added
 					let usersNot: any[] = FindUsersWithNoStream(parsedData);
+					var remUsers: string = "";
+					for (let index = 0; index < usersNot.length; index++) {
+						const element = usersNot[index];
+						console.log(element);
+						if (element["state"] === "delete") {
+							remUsers += element["address"] + " ";
+						}
+					}
+					setRemovedUsers(remUsers);
 					console.log(usersNot);
 					let temp: any[] = [];
 					if (usersNot.length > 0) {
@@ -425,6 +435,8 @@ function VerticalFlowSalary(params: any) {
 							<div>Modify Users: {modifyUser}</div>
 							<br />
 							<div>Remove Users: {removeUser}</div>
+							<br />
+							<div>Removed Users: {removedUsers}</div>
 						</Space>
 					) : (
 						<Button onClick={AddUsersToPool} disabled>
