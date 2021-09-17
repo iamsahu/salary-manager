@@ -251,6 +251,25 @@ function VerticalFlowSalary(params: any) {
 				}
 			}
 		}
+		//Delete
+		for (let index = 0; index < _indexData.length; index++) {
+			const element = _indexData[index];
+			//If it is in index & not in csv than it has to be deleted
+			let delIndex = params.data.findIndex(
+				(x: any) =>
+					element["recipient"]["id"] ===
+					x[addressToCheck(params.vertical)].toLowerCase()
+			);
+			if (delIndex.toString() === "-1") {
+				console.log("delete");
+				users.push({
+					address: element["recipient"]["id"].toLowerCase(),
+					salary: 0,
+					state: "delete",
+				});
+				rem += 1;
+			}
+		}
 		setModifyUser(mod);
 		setNewUsers(notIn);
 		setRemoveUser(rem);
