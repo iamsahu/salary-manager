@@ -31,6 +31,7 @@ function VerticalFlowSalary(params: any) {
 	const [newUsers, setNewUsers] = useState(0);
 	const [modifyUser, setModifyUser] = useState(0);
 	const [removeUser, setRemoveUser] = useState(0);
+	const [removedUsers, setRemovedUsers] = useState("None");
 	const [csvData, setcsvData] = useState<Array<any> | null>([]);
 	var web3 = new Web3(window.ethereum);
 
@@ -99,6 +100,15 @@ function VerticalFlowSalary(params: any) {
 					console.log(parsedData);
 					//Calculate whether new members need to be added
 					let usersNot: any[] = FindUsersWithNoStream(parsedData);
+					var remUsers: string = "";
+					for (let index = 0; index < usersNot.length; index++) {
+						const element = usersNot[index];
+						console.log(element);
+						if (element["state"] === "delete") {
+							remUsers += element["address"] + " ";
+						}
+					}
+					setRemovedUsers(remUsers);
 					console.log(usersNot);
 					let temp: any[] = [];
 					if (usersNot.length > 0) {
@@ -238,6 +248,26 @@ function VerticalFlowSalary(params: any) {
 				}
 			}
 		}
+		//Delete
+		for (let index = 0; index < _indexData.length; index++) {
+			const element = _indexData[index];
+			//If it is in index than it has to be deleted if not in csv
+			let delIndex = params.data.findIndex(
+				(x: any) =>
+					element["recipient"]["id"] ===
+					x[addressToCheck(params.vertical)].toLowerCase()
+			);
+			if (delIndex.toString() === "-1") {
+				console.log("delete");
+				users.push({
+					address: element["recipient"]["id"].toLowerCase(),
+					salary: 0,
+					state: "delete",
+				});
+				rem += 1;
+			}
+		}
+
 		setModifyUser(mod);
 		setNewUsers(notIn);
 		setRemoveUser(rem);
@@ -250,6 +280,7 @@ function VerticalFlowSalary(params: any) {
 		}
 		setLoadingState(true);
 		let usersNot: any[] = FindUsersWithNoStream(indexData);
+
 		if (usersNot.length > 0) {
 			let temp: any[] = BatchCallForAddingUsers(usersNot);
 			var web3 = new Web3(window.ethereum);
@@ -352,6 +383,18 @@ function VerticalFlowSalary(params: any) {
 		// 	.catch((error: any) => console.log(error));
 	}
 
+	function RemovedUsers(): String {
+		let usersNot: any[] = FindUsersWithNoStream(indexData);
+		var remUsers: String = "";
+		for (let index = 0; index < usersNot.length; index++) {
+			const element = usersNot[index];
+			if (element["state"] === "delete") {
+				remUsers += element["address"] + " ";
+			}
+		}
+		return remUsers;
+	}
+
 	return (
 		<Content
 			style={{ padding: "20px 20px", background: "#fff", minHeight: "80vh" }}
@@ -383,6 +426,8 @@ function VerticalFlowSalary(params: any) {
 							<div>Modify Users: {modifyUser}</div>
 							<br />
 							<div>Remove Users: {removeUser}</div>
+							<br />
+							<div>Removed Users: {removedUsers}</div>
 						</Space>
 					) : (
 						<Button onClick={AddUsersToPool} disabled>
