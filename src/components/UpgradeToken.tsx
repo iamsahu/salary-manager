@@ -44,7 +44,7 @@ function UpgradeToken(params: any) {
 			},
 		});
 	};
-	
+
 	const openFailNotification = () => {
 		notification["error"]({
 			message: "Fail!",
@@ -135,7 +135,6 @@ function UpgradeToken(params: any) {
 						// UpgradeToken();
 						setVisible(false);
 						openApprovalNotification();
-
 					})
 					.catch((error: any) => {
 						console.log(error);
@@ -191,8 +190,10 @@ function UpgradeToken(params: any) {
 				return "BPT";
 			case "blackPoolLP":
 				return "sdam3CRV";
-			case "rektPool":
-				return "rekt_salary";
+			case "rektPoolLP":
+				return "sdam3CRV";
+			case "stakeCapitalLP":
+				return "sdam3CRV";
 			default:
 				return "";
 		}
