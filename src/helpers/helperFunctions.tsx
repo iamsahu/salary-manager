@@ -44,8 +44,10 @@ export function tokenAddress(vertical: String): any {
 			return process.env.REACT_APP_BPT;
 		case "blackPoolLP":
 			return process.env.REACT_APP_SDAM3CRV;
-		case "rektPool":
-			return process.env.REACT_APP_REKTT;
+		case "rektPoolLP":
+			return process.env.REACT_APP_SDAM3CRV;
+		case "stakeCapitalLP":
+			return process.env.REACT_APP_SDAM3CRV;
 
 		default:
 			return "";
@@ -62,8 +64,10 @@ export function superTokenAddress(vertical: String): any {
 			return process.env.REACT_APP_BPTX;
 		case "blackPoolLP":
 			return process.env.REACT_APP_SDAM3CRVX;
-		case "rektPool":
-			return process.env.REACT_APP_REKTT;
+		case "rektPoolLP":
+			return process.env.REACT_APP_SDAM3CRVX;
+		case "stakeCapitalLP":
+			return process.env.REACT_APP_SDAM3CRVX;
 
 		default:
 			return "";
@@ -80,8 +84,10 @@ export function salaryToCheck(vertical: String): any {
 			return "bpt_tokens";
 		case "blackPoolLP":
 			return "bpt_lp";
-		case "rektPool":
-			return "rekt_salary";
+		case "rektPoolLP":
+			return "rekt_lp";
+		case "stakeCapitalLP":
+			return "stakecapital_lp";
 
 		default:
 			return "";
@@ -94,9 +100,9 @@ export function addressToCheck(vertical: String): any {
 		case "stakePoolLP":
 		case "blackPool":
 		case "blackPoolLP":
+		case "rektPoolLP":
+		case "stakeCapitalLP":
 			return "contributor_address";
-		case "rektPool":
-			return "rekt_salary";
 		default:
 			return "yo";
 	}

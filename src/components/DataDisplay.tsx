@@ -74,6 +74,12 @@ function DataDisplay(params: any) {
 					<TabPane tab="BlackPool LP" key="4">
 						<VerticalFlowSalary data={data} vertical={"blackPoolLP"} />
 					</TabPane>
+					<TabPane tab="Rekt LP" key="5">
+						<VerticalFlowSalary data={data} vertical={"rektPoolLP"} />
+					</TabPane>
+					<TabPane tab="StakeCapital LP" key="6">
+						<VerticalFlowSalary data={data} vertical={"stakeCapitalLP"} />
+					</TabPane>
 					{/* <TabPane tab="rekt" key="3">
 						Coming soon!
 					</TabPane> */}
