@@ -87,7 +87,7 @@ export function salaryToCheck(vertical: String): any {
 		case "rektPoolLP":
 			return "rekt_lp";
 		case "stakeCapitalLP":
-			return "stakecapital_lp";
+			return "sc_lp";
 
 		default:
 			return "";
