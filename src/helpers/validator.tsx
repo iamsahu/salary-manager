@@ -22,7 +22,7 @@ export interface Payouts {
 	state?: string;
 	sdt?: string;
 	rekt_lp?: string;
-	stakecapital_lp?: string;
+	sc_lp?: string;
 	0x361a5a4993493ce00f61c32d4ecca5512b82ce90?: string;
 	bpt?: string;
 	0x6863bd30c9e313b264657b107352ba246f8af8e0?: string;
@@ -43,7 +43,7 @@ export const schema: JSONSchemaType<Payouts> = {
 		bpt_tokens: { type: "string", format: "num", nullable: true },
 		bpt_lp: { type: "string", format: "num", nullable: true },
 		rekt_lp: { type: "string", format: "num", nullable: true },
-		stakecapital_lp: { type: "string", format: "num", nullable: true },
+		sc_lp: { type: "string", format: "num", nullable: true },
 		state: { type: "string", nullable: true },
 		sdt: {
 			type: "string",
